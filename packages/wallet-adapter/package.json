@@ -1,0 +1,21 @@
+{
+  "name": "@setrya/wallet-adapter",
+  "version": "0.1.0",
+  "license": "MIT OR Apache-2.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@setrya/domain": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.4",
+    "vitest": "3.2.4"
+  }
+}
