@@ -1,0 +1,25 @@
+{
+  "name": "@setrya/db",
+  "version": "0.1.0",
+  "license": "MIT OR Apache-2.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "generate": "drizzle-kit generate",
+    "migrate": "tsx src/migrate.ts"
+  },
+  "dependencies": {
+    "drizzle-orm": "0.44.7",
+    "postgres": "3.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.4",
+    "drizzle-kit": "0.31.5",
+    "tsx": "4.20.6"
+  }
+}

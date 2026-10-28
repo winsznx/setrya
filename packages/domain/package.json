@@ -1,0 +1,23 @@
+{
+  "name": "@setrya/domain",
+  "version": "0.1.0",
+  "license": "MIT OR Apache-2.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@noble/hashes": "1.8.0",
+    "zod": "3.25.76",
+    "@scure/base": "1.2.6"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.4",
+    "vitest": "3.2.4"
+  }
+}
