@@ -27,6 +27,17 @@ Setrya is single-owner and self-hosted. Custody is operator-managed on your own 
 
 The payment path is `pczt_create` (FullPrivacy, Ironwood only), then `pczt_inspect`, compared with the approval to the zatoshi, including the ZIP 317 fee. Then come owner step-up, `pczt_prove`, `pczt_sign` and `pczt_extract`. The signed bytes are stored encrypted before `sendrawtransaction`, and confirmations come from chain lookups. An unknown broadcast outcome is investigated and resubmitted byte for byte, never rebuilt.
 
+## Live testnet proof
+
+On 29 October 2026, Setrya ran a full settlement on Zcash testnet through https://setrya.xyz:
+- It imported a fee export and excluded a trading-volume row as an exception, then froze and approved the period.
+- It paid two partners in one fully shielded Ironwood transaction:
+  [`0e73c774f62126365794efbba9ec1710121c123d42a4e1ca51c1cd65c753ce44`](https://testnet.zcashexplorer.app/transactions/0e73c774f62126365794efbba9ec1710121c123d42a4e1ca51c1cd65c753ce44).
+- It confirmed on chain 196 seconds after broadcast.
+- Each partner's own wallet then showed exactly the approved amount in Ironwood: 0.115 TAZ and 0.0575 TAZ.
+
+`tests/e2e/live-testnet.mjs` repeats that run against any deployment.
+
 ## Layout
 
 ```
