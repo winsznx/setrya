@@ -67,8 +67,3 @@ export function IconDisc({ name, className }: { name: IconName; className?: stri
     </span>
   );
 }
-
-/** ZEC is the only gold on the page: this dot sits beside every ZEC amount and the word that names the coin. */
-export function ZecDot({ className }: { className?: string }) {
-  return <span aria-hidden="true" className={cx('inline-block size-2 shrink-0 rounded-pill bg-zec', className)} />;
-}

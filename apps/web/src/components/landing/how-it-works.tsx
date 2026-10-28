@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
 
+import { ZecMark } from '@/components/brand/zec-mark';
 import { Icon } from '@/components/ui/icons';
 
-import { Eyebrow, Section, SplitHeading, ZecDot } from './primitives';
+import { Eyebrow, Section, SplitHeading } from './primitives';
 
 interface Step {
   title: string;
@@ -27,7 +28,7 @@ const STEPS: Step[] = [
     title: 'Apply each agreement',
     body: 'Versioned agreements turn eligible fees into an exact amount per partner, with the formula, the rate you approved and the rounding all written down.',
     artifact: (
-      <div className={ROW}><span className="font-mono text-ink-secondary">1,150.00 × 20% × 0.02</span><span className="flex items-center gap-1.5 font-medium text-ink"><ZecDot />4.6 ZEC</span></div>
+      <div className={ROW}><span className="font-mono text-ink-secondary">1,150.00 × 20% × 0.02</span><span className="flex items-center gap-1.5 font-medium text-ink"><ZecMark />4.6 ZEC</span></div>
     ),
   },
   {

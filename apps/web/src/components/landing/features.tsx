@@ -1,6 +1,7 @@
+import { ZecMark } from '@/components/brand/zec-mark';
 import { Icon } from '@/components/ui/icons';
 
-import { CenteredHeading, Eyebrow, IconDisc, Section, ZecDot } from './primitives';
+import { CenteredHeading, Eyebrow, IconDisc, Section } from './primitives';
 
 const ART = 'mt-6 space-y-1.5 rounded-panel bg-surface p-3 text-label shadow-raised';
 
@@ -19,8 +20,8 @@ export function Features() {
           <h3 className="mt-5 text-h2 text-ink">A problem holds one payout, not the period</h3>
           <p className="mt-2 text-body-s text-ink-secondary">A missing address or an unresolved row holds only the payouts it affects. Everyone else can still be paid.</p>
           <ul className={ART}>
-            <li className="flex justify-between gap-3"><span>Promoter Ana</span><span className="flex items-center gap-1.5 font-medium"><ZecDot />4.6 ZEC</span></li>
-            <li className="flex justify-between gap-3"><span>Creator Bo</span><span className="flex items-center gap-1.5 font-medium"><ZecDot />2.3 ZEC</span></li>
+            <li className="flex justify-between gap-3"><span>Promoter Ana</span><span className="flex items-center gap-1.5 font-medium"><ZecMark />4.6 ZEC</span></li>
+            <li className="flex justify-between gap-3"><span>Creator Bo</span><span className="flex items-center gap-1.5 font-medium"><ZecMark />2.3 ZEC</span></li>
             <li className="flex justify-between gap-3"><span>Studio Cy</span><span className="rounded-pill bg-warning-soft px-2 text-warning-text">Held: no address</span></li>
           </ul>
         </article>

@@ -1,15 +1,16 @@
 import { ButtonLink } from '@/components/ui/button';
+import { ZecMark } from '@/components/brand/zec-mark';
 import { cx } from '@/components/ui/cx';
 
 import { HeroScene } from './hero-scene';
-import { CONTAINER, Eyebrow, ZecDot } from './primitives';
+import { CONTAINER, Eyebrow } from './primitives';
 
 const FACTS = ['Fully shielded ZEC', 'Ironwood pool only', 'Inspected before signing', 'Self-hosted keys'];
 
 export function Hero({ openHref }: { openHref: string }) {
   return (
     <section aria-labelledby="hero-title" className={cx(CONTAINER, 'flex flex-col items-center pt-12 text-center md:pt-16')}>
-      <Eyebrow mark={<ZecDot />}>Revenue-share settlement on Zcash</Eyebrow>
+      <Eyebrow mark={<ZecMark />}>Revenue-share settlement on Zcash</Eyebrow>
       <h1 id="hero-title" className="mt-7 max-w-[60rem] text-balance text-display-xl text-ink md:mt-8">
         Pay every partner what they earned, and nothing about it lands on a public ledger.
       </h1>

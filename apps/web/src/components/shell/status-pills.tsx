@@ -1,5 +1,6 @@
 import type { NetworkLabel, WalletState } from '@setrya/api/contract';
 
+import { ZecMark } from '@/components/brand/zec-mark';
 import { Icon } from '@/components/ui/icons';
 import { cx } from '@/components/ui/cx';
 
@@ -9,7 +10,7 @@ export function NetworkBadge({ network, className }: { network: NetworkLabel; cl
   const tone = network === 'MAINNET' ? 'bg-brand text-on-brand' : network === 'SAMPLE' ? 'bg-sample-soft text-sample' : 'bg-zec-soft text-ink';
   return (
     <span className={cx('inline-flex items-center gap-1.5 rounded-pill px-2.5 py-1 text-micro font-semibold tracking-[0.06em]', tone, className)} title={network === 'SAMPLE' ? 'Sample data, no funds move' : `Settles on Zcash ${network.toLowerCase()}`}>
-      <span aria-hidden className={cx('size-1.5 rounded-pill', network === 'MAINNET' ? 'bg-zec' : network === 'SAMPLE' ? 'bg-sample' : 'bg-zec')} />
+      {network === 'SAMPLE' ? <span aria-hidden className="size-1.5 rounded-pill bg-sample" /> : <ZecMark size={12} />}
       {network}
     </span>
   );

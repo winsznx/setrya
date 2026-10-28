@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
+import { ZecMark } from '@/components/brand/zec-mark';
 import { Wordmark } from '@/components/brand/wordmark';
-import { CONTAINER, ZecDot } from '@/components/landing/primitives';
+import { CONTAINER } from '@/components/landing/primitives';
 import { MobileMenu } from '@/components/marketing/mobile-menu';
 import { loadView } from '@/lib/api/views';
 
@@ -45,7 +46,7 @@ export default async function MarketingLayout({ children }: { children: ReactNod
           <div className="max-w-[20rem]">
             <Wordmark />
             <p className="mt-4 text-body-s text-ink-secondary">Revenue-share settlement in fully shielded ZEC. Self-hosted: your server, your wallet, your records.</p>
-            <p className="mt-4 inline-flex items-center gap-2 text-label text-ink-muted"><ZecDot />Settles on Zcash</p>
+            <p className="mt-4 inline-flex items-center gap-2 text-label text-ink-muted"><ZecMark />Settles on Zcash</p>
           </div>
           {FOOTER.map((col) => (
             <nav key={col.title} aria-label={col.title}>

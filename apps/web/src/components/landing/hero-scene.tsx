@@ -1,10 +1,11 @@
 import { formatGrouped, formatZec, parseDec } from '@setrya/domain';
 
 import { SAMPLE_PARTNERS, SAMPLE_ROWS, sampleCalculation } from '@/components/marketing/sample';
+import { ZecMark } from '@/components/brand/zec-mark';
 import { cx } from '@/components/ui/cx';
 import { Icon } from '@/components/ui/icons';
 
-import { ZecDot } from './primitives';
+
 
 const usd = (v: string) => formatGrouped(parseDec(v, 36), 2, 8);
 
@@ -50,7 +51,7 @@ export function HeroScene({ className }: { className?: string }) {
               <li key={row.key} className="flex items-center justify-between gap-3">
                 <span className="min-w-0 truncate"><span className="font-medium">{name(row.partnerId)}</span> <span className="text-ink-muted">{SAMPLE_PARTNERS.find((p) => p.id === row.partnerId)?.ratePct}%</span></span>
                 {row.status === 'payable' ? (
-                  <span className="inline-flex shrink-0 items-center gap-1.5 tnum font-medium"><ZecDot />{formatZec(row.zat!, { trim: true })} ZEC</span>
+                  <span className="inline-flex shrink-0 items-center gap-1.5 tnum font-medium"><ZecMark />{formatZec(row.zat!, { trim: true })} ZEC</span>
                 ) : (
                   <span className="shrink-0 rounded-pill bg-warning-soft px-2 py-0.5 text-label text-warning-text">Held until an address is added</span>
                 )}
@@ -77,7 +78,7 @@ export function HeroScene({ className }: { className?: string }) {
           </div>
           <div className="rounded-[20px] border border-glass-deep-edge bg-glass-deep p-4 text-white shadow-floating backdrop-blur-md sm:p-5">
             <p className="text-label text-white/70">Shielded payment, one transaction</p>
-            <p className="mt-1 flex items-center gap-2 text-figure tnum"><ZecDot className="size-2.5" />{formatZec(total, { trim: true })} ZEC</p>
+            <p className="mt-1 flex items-center gap-2 text-figure tnum"><ZecMark size={22} />{formatZec(total, { trim: true })} ZEC</p>
             <p className="mt-2 text-label text-white/70">Then one statement per partner, readable only by them.</p>
           </div>
         </div>

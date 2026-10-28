@@ -1,5 +1,7 @@
 import { formatGrouped, formatZec, parseDec } from '@setrya/domain';
 
+import { ZecMark } from '@/components/brand/zec-mark';
+
 import { cx } from './cx';
 
 /** A source-currency amount from its exact decimal string. Never formats through a JS number. */
@@ -20,8 +22,8 @@ export function Zec({ zat, decimal, className, trim = true }: { zat: bigint | st
   if (zat !== null) text = formatZec(typeof zat === 'string' ? BigInt(zat) : zat, { trim });
   else text = formatGrouped(parseDec(decimal ?? '0', 36), 2, 8);
   return (
-    <span className={cx('tnum inline-flex items-baseline gap-1 whitespace-nowrap', className)}>
-      <span aria-hidden className="relative top-[-0.1em] inline-block size-[0.45em] rounded-pill bg-zec" />
+    <span className={cx('tnum inline-flex items-center gap-1.5 whitespace-nowrap', className)}>
+      <ZecMark size={13} />
       {text} <span className="text-ink-muted">ZEC</span>
     </span>
   );
