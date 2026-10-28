@@ -39,6 +39,7 @@ export type ErrorCode =
   | 'RESTORE_FAILED'
   | 'STEP_UP_REQUIRED'
   | 'CONFLICT'
+  | 'DEMO_MODE'
   | 'INTERNAL';
 
 const STATUS: Partial<Record<ErrorCode, number>> = {
@@ -46,6 +47,7 @@ const STATUS: Partial<Record<ErrorCode, number>> = {
   VAULT_LOCKED: 423,
   FORBIDDEN: 403,
   CSRF_REJECTED: 403,
+  DEMO_MODE: 403,
   NOT_FOUND: 404,
   INVALID_INPUT: 422,
   RATE_LIMITED: 429,

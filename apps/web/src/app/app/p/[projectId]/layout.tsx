@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
+import { DemoBanner } from '@/components/app/demo-notice';
 import { AppShell } from '@/components/shell/app-shell';
 import { loadView } from '@/lib/api/views';
 
@@ -9,7 +10,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function ProjectLayout({ children, params }: { children: ReactNode; params: Promise<{ projectId: string }> }) {
   const { projectId } = await params;
-  const { project, projects, ownerName, network, wallet, exceptions, lockMinutes } = await loadView('shell.project', { projectId }, `/app/p/${projectId}`);
+  const { project, projects, ownerName, network, wallet, exceptions, lockMinutes, demo } = await loadView('shell.project', { projectId }, `/app/p/${projectId}`);
   return (
     <AppShell
       projectId={project.id}
@@ -21,6 +22,7 @@ export default async function ProjectLayout({ children, params }: { children: Re
       openExceptions={exceptions}
       autoLockMinutes={lockMinutes}
     >
+      {demo && <DemoBanner />}
       {children}
     </AppShell>
   );

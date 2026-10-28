@@ -4,9 +4,10 @@ import { z } from 'zod';
 
 import { ApiError, body, rateLimit, route } from '../../../../http/route';
 import { audit } from '../../../../services/audit';
+import { blockedInDemo } from '../../../../services/demo-mode';
 
 /** Re-wraps the same data key under a new passphrase. No record is re-encrypted, so nothing can be half-migrated. */
-export const POST = route('unlocked', async (req, ctx) => {
+export const POST = blockedInDemo(route('unlocked', async (req, ctx) => {
   rateLimit(`vaultpw:${ctx.sessionId}`, 5, 10 * 60_000);
   const input = await body(req, z.object({ current: z.string().max(256), next: z.string().max(256), confirm: z.string(), backupAcknowledged: z.literal(true) }));
   const [settings] = await getDb().select().from(schema.systemSettings).where(eq(schema.systemSettings.id, 1));
@@ -21,4 +22,4 @@ export const POST = route('unlocked', async (req, ctx) => {
   await getDb().update(schema.systemSettings).set({ vaultSalt: vault.salt, vaultWrappedDek: vault.wrappedDek, updatedAt: new Date() }).where(eq(schema.systemSettings.id, 1));
   await audit(ctx.cipher, 'owner', { projectId: null, eventType: 'security.vault_passphrase_changed' });
   return { ok: true };
-});
+}));

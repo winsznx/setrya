@@ -4,11 +4,12 @@ import { z } from 'zod';
 
 import { ApiError, body, rateLimit, route } from '../../../../http/route';
 import { audit } from '../../../../services/audit';
+import { blockedInDemo } from '../../../../services/demo-mode';
 import { verifyOwnerPassword } from '../../../../services/owner';
 import { createSession } from '../../../../services/session';
 
 /** Changing the password bumps auth_version, which signs out every other session. This one is re-issued. */
-export const POST = route('unlocked', async (req, ctx) => {
+export const POST = blockedInDemo(route('unlocked', async (req, ctx) => {
   rateLimit(`pw:${ctx.sessionId}`, 5, 10 * 60_000);
   const input = await body(req, z.object({ current: z.string().max(256), next: z.string().max(256), confirm: z.string() }));
   if (!(await verifyOwnerPassword(ctx.ownerId, input.current))) throw new ApiError('FORBIDDEN', 'Current password not accepted.', { fieldErrors: { current: 'Not accepted' } });
@@ -20,4 +21,4 @@ export const POST = route('unlocked', async (req, ctx) => {
   await createSession(ctx.ownerId, owner!.authVersion, false, req.headers.get('user-agent'));
   await audit(ctx.cipher, 'owner', { projectId: null, eventType: 'security.password_changed' });
   return { ok: true, relock: true };
-});
+}));

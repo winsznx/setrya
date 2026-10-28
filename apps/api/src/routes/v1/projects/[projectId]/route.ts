@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { ApiError, body, route } from '../../../../http/route';
 import { audit } from '../../../../services/audit';
+import { assertNotDemo } from '../../../../services/demo-mode';
 import { requireProjectApi } from '../../../../services/projects';
 import { projectSchema } from '../../../../services/schemas';
 
@@ -29,6 +30,7 @@ export const GET = route('unlocked', async (_req, ctx, { projectId }) => require
 export const PATCH = route('unlocked', async (req, ctx, { projectId }) => {
   const project = await requireProjectApi(ctx, projectId!);
   const input = await body(req, patch);
+  if (input.section === 'archive') assertNotDemo();
   if (input.section !== 'archive' && project.archived) throw new ApiError('FORBIDDEN', 'Archived projects are read-only.');
   let set: Partial<typeof schema.projects.$inferInsert> = {};
   if (input.section === 'project') {

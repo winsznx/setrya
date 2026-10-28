@@ -7,18 +7,21 @@ interface Entry {
   dek: Buffer;
   lastUsed: number;
   idleMs: number;
+  /** Absolute end of the unlock, however active the session. Infinity unless a cap applies. */
+  expiresAt: number;
 }
 
 const store: Map<string, Entry> = ((globalThis as { setryaVault?: Map<string, Entry> }).setryaVault ??= new Map());
 
-export function putKey(sessionId: string, dek: Buffer, idleMinutes: number): void {
-  store.set(sessionId, { dek, lastUsed: Date.now(), idleMs: idleMinutes * 60_000 });
+export function putKey(sessionId: string, dek: Buffer, idleMinutes: number, maxLifetimeMs = Infinity): void {
+  const now = Date.now();
+  store.set(sessionId, { dek, lastUsed: now, idleMs: idleMinutes * 60_000, expiresAt: now + maxLifetimeMs });
 }
 
 export function takeKey(sessionId: string): Buffer | null {
   const entry = store.get(sessionId);
   if (!entry) return null;
-  if (Date.now() - entry.lastUsed > entry.idleMs) {
+  if (Date.now() - entry.lastUsed > entry.idleMs || Date.now() > entry.expiresAt) {
     dropKey(sessionId);
     return null;
   }

@@ -1,6 +1,7 @@
 import { getDb, schema, eq, and, desc, gte, like } from '@setrya/db';
 
 import { ApiError } from '../http/route';
+import { demoConfig } from '../services/demo-mode';
 import { overview, partnersDue } from '../services/overview';
 import { ownerExists } from '../services/owner';
 import { listPartners } from '../services/partners';
@@ -18,8 +19,10 @@ export const shellViews = {
   /** Public: only whether an owner exists and whether this browser is signed in or unlocked. */
   'auth.status': defineView('none', async () => {
     const session = await readSession();
-    return { ownerExists: await ownerExists(), signedIn: session !== null, unlocked: session !== null && unlockedFrom(session) !== null };
+    return { ownerExists: await ownerExists(), signedIn: session !== null, unlocked: session !== null && unlockedFrom(session) !== null, demoMode: demoConfig().enabled };
   }),
+  /** The shared judge login, shown on the sign-in page only when the operator configured one for demo mode. */
+  'auth.demoLogin': defineView('none', async () => demoConfig().login),
   'auth.unlock': defineView('session', async (session) => ({ ownerName: session.ownerName, unlocked: unlockedFrom(session) !== null })),
   'shell.home': defineView('unlocked', async (ctx) => {
     const project = await defaultProject(ctx);
@@ -36,6 +39,7 @@ export const shellViews = {
       wallet: walletSummary(health),
       exceptions,
       lockMinutes,
+      demo: demoConfig().enabled ? { maxZat: demoConfig().maxZat } : null,
     };
   }),
   'shell.overview': defineView('unlocked', async (ctx, q) => {

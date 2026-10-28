@@ -1,5 +1,6 @@
 import { getDb, schema, eq, and, isNull, gt, desc, sql } from '@setrya/db';
 
+import { demoConfig } from '../services/demo-mode';
 import { listPeriods } from '../services/periods';
 import { requireProjectApi } from '../services/projects';
 import { networkLabel, walletSummary } from '../services/shell';
@@ -26,12 +27,12 @@ export const settingsViews = {
     const project = await requireProjectApi(ctx, q.get('projectId'));
     const sessions = await getDb().select({ id: schema.sessions.id, userAgent: schema.sessions.userAgent, createdAt: schema.sessions.createdAt, expiresAt: schema.sessions.expiresAt }).from(schema.sessions).where(and(eq(schema.sessions.ownerId, ctx.ownerId), isNull(schema.sessions.revokedAt), gt(schema.sessions.expiresAt, new Date()))).orderBy(desc(schema.sessions.lastUsedAt));
     const [settings] = await getDb().select().from(schema.systemSettings).where(eq(schema.systemSettings.id, 1));
-    return { project, sessions, currentSessionId: ctx.sessionId, autoLockMinutes: settings?.autoLockMinutes ?? 15 };
+    return { project, sessions, currentSessionId: ctx.sessionId, autoLockMinutes: settings?.autoLockMinutes ?? 15, demoMode: demoConfig().enabled };
   }),
   'settings.integrations': defineView('unlocked', async (ctx, q) => {
     const project = await requireProjectApi(ctx, q.get('projectId'));
     const health = await walletHealth({ minConf: project.minConfirmations });
     return { project, health, wallet: walletSummary(health) };
   }),
-  'settings.project': defineView('unlocked', async (ctx, q) => ({ project: await requireProjectApi(ctx, q.get('projectId')) })),
+  'settings.project': defineView('unlocked', async (ctx, q) => ({ project: await requireProjectApi(ctx, q.get('projectId')), demoMode: demoConfig().enabled })),
 };

@@ -1,8 +1,9 @@
 import { ApiError, route } from '../../../../http/route';
 import { BACKUP_TABLES, openBackup } from '../../../../services/backup';
+import { blockedInDemo } from '../../../../services/demo-mode';
 
 /** Decrypts an uploaded backup in memory and reports what it contains. Writes nothing. */
-export const POST = route('unlocked', async (req) => {
+export const POST = blockedInDemo(route('unlocked', async (req) => {
   const form = await req.formData();
   const file = form.get('file');
   const password = String(form.get('password') ?? '');
@@ -14,4 +15,4 @@ export const POST = route('unlocked', async (req) => {
   } catch {
     throw new ApiError('RESTORE_FAILED', 'The file could not be decrypted with that password, or it is not a Setrya backup.');
   }
-});
+}));

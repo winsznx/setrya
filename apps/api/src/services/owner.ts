@@ -3,6 +3,7 @@ import { hashCanonical } from '@setrya/domain';
 import { constantTimeEqual, createVault, hashPassword, loadMasterKey, randomToken, sha256, unwrapVault, verifyPassword } from '@setrya/security';
 
 import { ApiError } from '../http/route';
+import { DEMO_MAX_UNLOCK_MS, demoConfig } from './demo-mode';
 import { putKey } from './vault-store';
 
 export async function ownerExists(): Promise<boolean> {
@@ -63,7 +64,7 @@ export async function unlockVault(sessionId: string, passphrase: string): Promis
   if (!settings?.vaultSalt || !settings.vaultWrappedDek) return false;
   const dek = await unwrapVault({ salt: settings.vaultSalt, wrappedDek: settings.vaultWrappedDek, version: 1 }, passphrase, loadMasterKey());
   if (!dek) return false;
-  putKey(sessionId, dek, settings.autoLockMinutes);
+  putKey(sessionId, dek, settings.autoLockMinutes, demoConfig().enabled ? DEMO_MAX_UNLOCK_MS : Infinity);
   return true;
 }
 

@@ -5,6 +5,7 @@ import { serve } from '@hono/node-server';
 import { log } from '@setrya/security';
 
 import { createApp } from './app';
+import { assertDemoNetwork } from './services/demo-mode';
 import { startRunner } from './services/payments/runner';
 
 function required(name: string): string {
@@ -16,6 +17,7 @@ function required(name: string): string {
 const edgeKey = required('SETRYA_EDGE_KEY');
 if (edgeKey.length < 32) throw new Error('SETRYA_EDGE_KEY must be at least 32 characters');
 required('DATABASE_URL');
+assertDemoNetwork();
 
 const port = Number(process.env.PORT ?? 8444);
 const hostname = process.env.HOST ?? '127.0.0.1';

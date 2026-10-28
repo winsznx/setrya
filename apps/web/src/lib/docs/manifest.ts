@@ -17,6 +17,7 @@ export const DOC_SECTIONS: readonly DocSection[] = [
     title: 'Start here',
     pages: [
       { slug: INTRODUCTION_SLUG, title: 'What is Setrya', description: 'Revenue-share settlement in fully shielded ZEC: who it is for, what it does, and what runs where.' },
+      { slug: 'for-judges', title: 'For judges: a five-minute tour', description: 'Sign in to the shared testnet workspace, see a settled period, open a partner statement and pay yourself.' },
       { slug: 'getting-started', title: 'Getting started', description: 'Deploy the settlement host and the web app, create the owner, fund the wallet and close a first period.' },
       { slug: 'networks', title: 'Mainnet, testnet and regtest', description: 'What each Zcash network is for, how Setrya keeps them apart, and what is live on each.' },
     ],
@@ -39,6 +40,7 @@ export const DOC_SECTIONS: readonly DocSection[] = [
     title: 'Safety and trust',
     pages: [
       { slug: 'security', title: 'Keys, vault and sessions', description: 'Who holds the spending keys, how records are encrypted, and the confirmations money movement needs.' },
+      { slug: 'verifiable-payouts', title: 'Verifiable payouts', description: 'How each partner proves their payout is part of the approved snapshot, from their own wallet, without seeing anyone else’s.' },
       { slug: 'privacy', title: 'Privacy model', description: 'Exactly what you, each partner, the public chain and the chain server can see, and what Setrya cannot hide.' },
       { slug: 'recovery', title: 'Backups and recovery', description: 'What to back up, how to restore it, and how Setrya reconciles payments after an interruption.' },
       { slug: 'fees-and-limits', title: 'Fees and limits', description: 'The network fee every payment pays, minimum payouts, rounding, and the limits Setrya enforces.' },
