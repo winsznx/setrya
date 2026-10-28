@@ -1,0 +1,12 @@
+{
+  "name": "@setrya/tests",
+  "private": true,
+  "license": "MIT OR Apache-2.0",
+  "type": "module",
+  "devDependencies": {
+    "playwright": "1.56.1",
+    "@playwright/test": "1.56.1",
+    "@noble/hashes": "1.8.0",
+    "@scure/base": "1.2.6"
+  }
+}

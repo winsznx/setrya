@@ -1,0 +1,4 @@
+external_id,occurred_at,description,amount,currency,fee_type,status,source_reference
+SAMPLE-1001,2026-10-03T14:00:00Z,Creator fees week 40,1200.00,USD,realised_fee,settled,payout-report-40
+SAMPLE-1002,2026-10-05T09:30:00Z,Trading volume week 40,20000.00,USD,realised_fee,settled,volume-dashboard
+SAMPLE-1003,2026-10-12T11:00:00Z,Refund of disputed launch fee,-50.00,USD,refund,settled,refund-7
