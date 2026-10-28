@@ -3,8 +3,9 @@
 # so the master key, database password and edge key never change underneath live data.
 #
 #   PUBLIC_ORIGIN=https://setrya.example API_HOSTS="api.setrya.example 203.0.113.7" ./bootstrap.sh
+#   TARGET_DIR=sandbox ./bootstrap.sh   writes the sandbox stack's secrets and api.env instead
 set -euo pipefail
-cd "$(dirname "$0")"
+cd "${TARGET_DIR:-$(dirname "$0")}"
 : "${PUBLIC_ORIGIN:?set PUBLIC_ORIGIN to the web app origin, e.g. https://setrya.example}"
 : "${API_HOSTS:?set API_HOSTS to the names and IPs the web tier uses to reach this API}"
 

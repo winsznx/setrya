@@ -508,3 +508,22 @@ export const walletObservations = pgTable('wallet_observations', {
   healthJson: jsonb('health_json'),
   observedAt: timestamp('observed_at', { withTimezone: true }),
 });
+
+/**
+ * Public testnet sandbox only: one claim per visitor address. The address itself is kept only as a fingerprint here;
+ * the partner record that pays it is encrypted like any other.
+ */
+export const sandboxClaims = pgTable('sandbox_claims', {
+  id: id(),
+  addressFingerprint: text('address_fingerprint').notNull().unique(),
+  clientKeyHash: text('client_key_hash').notNull(),
+  state: text('state').notNull(),
+  projectId: uuid('project_id'),
+  periodId: uuid('period_id'),
+  transactionId: uuid('transaction_id'),
+  statementId: uuid('statement_id'),
+  shareId: text('share_id'),
+  error: text('error'),
+  createdAt: createdAt(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+});

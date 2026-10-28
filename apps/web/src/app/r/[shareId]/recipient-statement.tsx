@@ -12,8 +12,9 @@ import { CopyButton } from '@/components/ui/copy-button';
 import { Dialog } from '@/components/ui/dialog';
 import { Icon } from '@/components/ui/icons';
 
-export function RecipientStatement({ shareId }: { shareId: string }) {
-  const state = useShare(shareId);
+/** `apiBase` and `allowAcknowledge` let the public testnet sandbox show its statements with the same page. */
+export function RecipientStatement({ shareId, apiBase, allowAcknowledge = true }: { shareId: string; apiBase?: string; allowAcknowledge?: boolean }) {
+  const state = useShare(shareId, apiBase);
   const [help, setHelp] = useState(false);
   if (state.kind === 'loading') return <div role="status" aria-live="polite" className="mt-6 space-y-3"><span className="sr-only">Decrypting statement</span><Skeleton className="h-8 w-60" /><Skeleton className="h-[28rem] rounded-panel" /></div>;
   if (state.kind !== 'open') return <ShareError state={state} />;
@@ -26,7 +27,7 @@ export function RecipientStatement({ shareId }: { shareId: string }) {
         <div className="mt-4 flex flex-wrap gap-2">
           <Button variant="secondary" icon="download" onClick={() => window.print()}>Download PDF</Button>
           {doc.payment.memoRef && <CopyButton value={doc.payment.memoRef} label="Copy payment reference" />}
-          {state.acknowledgedAt ? <span className="inline-flex items-center gap-1.5 text-body-s text-ink-secondary"><Icon name="check" size={15} /> Receipt acknowledged</span> : doc.totals.zat && <a className={buttonClasses({ size: 'sm' })} href={`/r/${shareId}/acknowledge#k=${state.key}`}>Acknowledge receipt</a>}
+          {!allowAcknowledge ? null : state.acknowledgedAt ? <span className="inline-flex items-center gap-1.5 text-body-s text-ink-secondary"><Icon name="check" size={15} /> Receipt acknowledged</span> : doc.totals.zat && <a className={buttonClasses({ size: 'sm' })} href={`/r/${shareId}/acknowledge#k=${state.key}`}>Acknowledge receipt</a>}
           <Button variant="ghost" size="sm" onClick={() => setHelp(true)}>How to verify with your wallet</Button>
         </div>
       </section>

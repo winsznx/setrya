@@ -17,13 +17,13 @@ export type ShareState =
   | { kind: 'open'; doc: StatementDocument; key: string; expiresAt: string; acknowledgedAt: string | null };
 
 /** Fetches ciphertext, then decrypts with the key from the URL fragment. The key is never sent anywhere. */
-export function useShare(shareId: string): ShareState {
+export function useShare(shareId: string, apiBase = '/api/v1'): ShareState {
   const [state, setState] = useState<ShareState>({ kind: 'loading' });
   useEffect(() => {
     const key = new URLSearchParams(window.location.hash.slice(1)).get('k');
     if (!key) return setState({ kind: 'missing_key' });
     void (async () => {
-      const r = await api<{ ciphertext: string; expiresAt: string; acknowledgedAt: string | null }>(`/api/v1/public-shares/${encodeURIComponent(shareId)}`);
+      const r = await api<{ ciphertext: string; expiresAt: string; acknowledgedAt: string | null }>(`${apiBase}/public-shares/${encodeURIComponent(shareId)}`);
       if (!r.ok) {
         if (r.error.code === 'OFFLINE') return setState({ kind: 'offline' });
         if (r.error.code === 'STATEMENT_EXPIRED') return setState({ kind: 'expired' });
@@ -38,6 +38,6 @@ export function useShare(shareId: string): ShareState {
         setState({ kind: 'wrong_key' });
       }
     })();
-  }, [shareId]);
+  }, [shareId, apiBase]);
   return state;
 }

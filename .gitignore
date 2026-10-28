@@ -16,3 +16,5 @@ infra/vps/secrets/
 infra/vps/api.env
 tests/e2e/shots/
 target/
+infra/vps/sandbox/secrets/
+infra/vps/sandbox/api.env

@@ -5,6 +5,8 @@ import { serve } from '@hono/node-server';
 import { log } from '@setrya/security';
 
 import { createApp } from './app';
+import { loadSandboxConfig } from './sandbox/config';
+import { registerSandbox } from './sandbox/routes';
 import { assertDemoNetwork } from './services/demo-mode';
 import { startRunner } from './services/payments/runner';
 
@@ -26,6 +28,8 @@ const keyFile = process.env.SETRYA_TLS_KEY_FILE;
 const tls = certFile && keyFile ? { cert: readFileSync(certFile), key: readFileSync(keyFile) } : null;
 
 const app = createApp(edgeKey);
+const sandbox = loadSandboxConfig();
+if (sandbox) await registerSandbox(app, edgeKey, sandbox);
 serve(
   { fetch: app.fetch, port, hostname, ...(tls ? { createServer: createHttpsServer, serverOptions: tls } : {}) },
   (info) => log('info', 'api.listening', { address: info.address, port: info.port, tls: tls !== null }),

@@ -24,7 +24,7 @@ export function middleware(req: NextRequest) {
   headers.set('content-security-policy', csp);
   const res = NextResponse.next({ request: { headers } });
   res.headers.set('content-security-policy', csp);
-  if (req.nextUrl.pathname.startsWith('/r/')) {
+  if (req.nextUrl.pathname.startsWith('/r/') || req.nextUrl.pathname.startsWith('/try/r/')) {
     res.headers.set('referrer-policy', 'no-referrer');
     res.headers.set('cache-control', 'no-store');
   }

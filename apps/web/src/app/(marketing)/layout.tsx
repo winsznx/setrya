@@ -10,6 +10,7 @@ import { loadView } from '@/lib/api/views';
 export const dynamic = 'force-dynamic';
 
 const NAV = [
+  ['/try', 'Try it'],
   ['/how-it-works', 'How it works'],
   ['/privacy', 'Privacy'],
   ['/docs', 'Docs'],

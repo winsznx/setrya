@@ -18,8 +18,8 @@ export function Hero({ openHref }: { openHref: string }) {
         Import the fees you actually earned, apply each partner’s agreement, approve a frozen snapshot, then pay everyone in one fully shielded ZEC transaction your own server builds and signs.
       </p>
       <div className="mt-9 flex w-full flex-col gap-3.5 sm:w-auto sm:flex-row sm:justify-center">
-        <ButtonLink href={openHref} size="lg" className="w-full sm:w-auto">Open workspace</ButtonLink>
-        <ButtonLink href="#how" variant="secondary" size="lg" icon="chevronDown" className="w-full sm:w-auto">How it works</ButtonLink>
+        <ButtonLink href="/try" size="lg" className="w-full sm:w-auto">Get paid privately, on testnet</ButtonLink>
+        <ButtonLink href={openHref} variant="secondary" size="lg" className="w-full sm:w-auto">Open workspace</ButtonLink>
       </div>
       <HeroScene className="mt-12 w-full text-left md:mt-14" />
       <ul aria-label="What every payment guarantees" className="mt-10 flex w-full flex-wrap items-center justify-center gap-x-6 gap-y-3 border-t border-border pt-7 md:justify-between">

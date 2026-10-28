@@ -1,0 +1,89 @@
+# The public testnet sandbox: its own API, signer and database, published on 8446. Never shares keys or data with the
+# operator stack beside it.
+# Lives beside other projects on the same machine, so every service has a memory ceiling and its own networks.
+name: setrya-sandbox
+
+services:
+  db:
+    image: postgres:16.15-alpine
+    environment:
+      POSTGRES_USER: setrya
+      POSTGRES_DB: setrya
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets: [db_password]
+    volumes: [db-data:/var/lib/postgresql/data]
+    networks: [data]
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "setrya", "-d", "setrya"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    mem_limit: 512m
+    restart: unless-stopped
+
+  signer:
+    build: { context: ../../../services/signer, args: { CARGO_BUILD_JOBS: "3" } }
+    image: setrya-signer:local
+    command:
+      - serve
+      - --data-dir=/data
+      - --listen=172.31.78.10:28232
+      - --allow-private-bind
+      - --cookie-file=/run/signer/.cookie
+      - --cookie-group-readable
+    volumes:
+      - signer-data:/data
+      - signer-run:/run/signer
+    networks:
+      wallet: { ipv4_address: 172.31.78.10 }
+    mem_limit: 1024m
+    restart: unless-stopped
+
+  migrate:
+    build: { context: ../../.., dockerfile: infra/docker/api.Dockerfile }
+    image: setrya-api:local
+    command: ["node", "dist/migrate.js"]
+    user: "10002:10002"
+    env_file: api.env
+    networks: [data]
+    depends_on:
+      db: { condition: service_healthy }
+    restart: "no"
+
+  api:
+    image: setrya-api:local
+    env_file: api.env
+    # A uid no host account uses, in the signer's group so it can read the RPC cookie and nothing else of the signer's.
+    user: "10002:10002"
+    group_add: ["10001"]
+    volumes:
+      - signer-run:/run/signer:ro
+      - ./secrets:/run/setrya:ro
+    ports: ["8446:8444"]
+    networks: [data, wallet]
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+      signer: { condition: service_started }
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('https').get({host:'127.0.0.1',port:8444,path:'/healthz',rejectUnauthorized:false},r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    mem_limit: 512m
+    restart: unless-stopped
+
+networks:
+  data:
+    internal: true
+  wallet:
+    ipam:
+      config: [{ subnet: 172.31.78.0/24 }]
+
+volumes:
+  db-data:
+  signer-data:
+  signer-run:
+
+secrets:
+  db_password:
+    file: ./secrets/db_password

@@ -16,16 +16,27 @@ interface UpstreamConfig {
   dispatcher: Agent | undefined;
 }
 
-let cached: UpstreamConfig | null = null;
+/** `main` is the operator's installation. `sandbox` is the separate public testnet sandbox, with its own keys. */
+export type UpstreamTarget = 'main' | 'sandbox';
 
-function config(): UpstreamConfig {
-  if (cached) return cached;
-  const baseUrl = process.env.SETRYA_API_URL;
-  const edgeKey = process.env.SETRYA_EDGE_KEY;
-  if (!baseUrl || !edgeKey) throw new Error('SETRYA_API_URL and SETRYA_EDGE_KEY must be set');
-  const ca = process.env.SETRYA_API_CA?.replace(/\\n/g, '\n');
-  cached = { baseUrl: baseUrl.replace(/\/$/, ''), edgeKey, dispatcher: ca ? new Agent({ connect: { ca } }) : undefined };
-  return cached;
+const ENV: Record<UpstreamTarget, { url: string; key: string; ca: string }> = {
+  main: { url: 'SETRYA_API_URL', key: 'SETRYA_EDGE_KEY', ca: 'SETRYA_API_CA' },
+  sandbox: { url: 'SETRYA_SANDBOX_API_URL', key: 'SETRYA_SANDBOX_EDGE_KEY', ca: 'SETRYA_SANDBOX_API_CA' },
+};
+
+const cached = new Map<UpstreamTarget, UpstreamConfig>();
+
+function config(target: UpstreamTarget): UpstreamConfig {
+  const hit = cached.get(target);
+  if (hit) return hit;
+  const names = ENV[target];
+  const baseUrl = process.env[names.url];
+  const edgeKey = process.env[names.key];
+  if (!baseUrl || !edgeKey) throw new Error(`${names.url} and ${names.key} must be set`);
+  const ca = process.env[names.ca]?.replace(/\\n/g, '\n');
+  const built = { baseUrl: baseUrl.replace(/\/$/, ''), edgeKey, dispatcher: ca ? new Agent({ connect: { ca } }) : undefined };
+  cached.set(target, built);
+  return built;
 }
 
 export interface UpstreamRequest {
@@ -36,8 +47,8 @@ export interface UpstreamRequest {
   clientIp: string;
 }
 
-export function upstream(request: UpstreamRequest): Promise<UndiciResponse> {
-  const { baseUrl, edgeKey, dispatcher } = config();
+export function upstream(request: UpstreamRequest, target: UpstreamTarget = 'main'): Promise<UndiciResponse> {
+  const { baseUrl, edgeKey, dispatcher } = config(target);
   const headers = new Headers(request.headers);
   headers.set(EDGE_KEY_HEADER, edgeKey);
   headers.set(CLIENT_IP_HEADER, request.clientIp);

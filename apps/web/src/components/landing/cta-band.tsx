@@ -11,7 +11,7 @@ export function CtaBand({ openHref }: { openHref: string }) {
           <p className="mt-5 max-w-[34rem] text-pretty text-body-l text-white/75">Start on testnet with a sample project, then point it at your own fee export when the numbers match yours.</p>
           <div className="mt-9 flex w-full flex-col gap-3.5 sm:w-auto sm:flex-row">
             <ButtonLink href={openHref} variant="secondary" size="lg" className="w-full border-transparent sm:w-auto">Open workspace</ButtonLink>
-            <ButtonLink href="/demo" variant="ghost" size="lg" className="w-full text-white hover:bg-white/10 hover:text-white sm:w-auto">Explore the sample</ButtonLink>
+            <ButtonLink href="/try" variant="ghost" size="lg" className="w-full text-white hover:bg-white/10 hover:text-white sm:w-auto">Get paid privately</ButtonLink>
           </div>
         </div>
       </div>
