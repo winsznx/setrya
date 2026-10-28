@@ -15,7 +15,7 @@ path = "src/main.rs"
 anyhow = "1"
 async-trait = "0.1.89"
 axum = { version = "0.8.9", default-features = false, features = ["http1", "json", "tokio"] }
-base64 = "0.22.1"
+base64 = "0.23.1"
 bip0039 = { version = "0.14", features = ["std", "all-languages"] }
 clap = { version = "4.5", features = ["derive"] }
 hex = "0.4"
