@@ -1,5 +1,5 @@
 import { getDb, schema, eq, and, isNull } from '@setrya/db';
-import { hashCanonical, type FrozenSnapshot } from '@setrya/domain';
+import { buildPayoutTree, formatCommitmentMemo, hashCanonical, randomSalt, type FrozenSnapshot, type PayoutLeaf } from '@setrya/domain';
 import { randomBytes, randomUUID } from 'node:crypto';
 
 import { ApiError } from '../http/route';
@@ -72,31 +72,52 @@ export async function approvePeriod(ctx: UnlockedContext, project: ProjectView, 
 
     const rows = await tx.select({ id: schema.calculationRows.id, key: schema.calculationRows.rowKey }).from(schema.calculationRows).where(and(eq(schema.calculationRows.periodId, period.id), eq(schema.calculationRows.revision, period.revision)));
     const rowIds = new Map(rows.map((r) => [r.key, r.id]));
-    const intents = frozen.payouts.map((p) => ({ id: randomUUID(), p }));
+
+    // Statement references are fixed first: each payout leaf names its partner by statement reference, never by name.
+    const partnerIds = new Set([...frozen.payouts.map((p) => p.partnerId), ...frozen.held.map((h) => h.partnerId)]);
+    const existingStatements = new Map<string, { id: string; v: number; reference: string }>();
+    for (const partnerId of partnerIds) {
+      const [existing] = await tx.select({ id: schema.statements.id, v: schema.statements.documentVersion, reference: schema.statements.reference }).from(schema.statements).where(and(eq(schema.statements.periodId, period.id), eq(schema.statements.partnerId, partnerId)));
+      if (existing) existingStatements.set(partnerId, existing);
+    }
+    const statementRefs = new Map([...partnerIds].map((partnerId) => [partnerId, existingStatements.get(partnerId)?.reference ?? `ST-${randomBytes(5).toString('hex').toUpperCase()}`]));
+
+    const intents = frozen.payouts.map((p) => ({ id: randomUUID(), p, memoRef: `STR-${randomBytes(4).toString('hex').toUpperCase()}` }));
+    const leaves = new Map<string, PayoutLeaf>(intents.map((i) => [i.id, { v: 1, periodId: period.id, revision: period.revision, payoutKey: i.p.payoutKey, partnerRef: statementRefs.get(i.p.partnerId)!, agreementVersionId: i.p.agreementVersionId, owed: i.p.owed, currency: i.p.currency, amountZat: i.p.amountZat, salt: randomSalt() }]));
+    const tree = intents.length > 0 ? buildPayoutTree([...leaves.values()]) : null;
+    const memoFor = (memoRef: string) => (tree ? formatCommitmentMemo(memoRef, tree.root) : memoRef);
+    if (tree) await tx.update(schema.approvals).set({ payoutRoot: tree.root }).where(eq(schema.approvals.id, approvalId));
     const size = Math.max(1, project.maxRecipientsPerBatch);
     const chunks: (typeof intents)[] = [];
     for (let i = 0; i < intents.length; i += size) chunks.push(intents.slice(i, i + size));
     for (const [i, chunk] of chunks.entries()) {
       const batchId = randomUUID();
       await tx.insert(schema.paymentBatches).values({ id: batchId, approvalId, sequence: i + 1, of: chunks.length, network: frozen.network, payerAccountId: frozen.accountId, status: 'approved', totalZat: chunk.reduce((s, c) => s + BigInt(c.p.amountZat), 0n), idempotencyKey: `${approvalId}:${i + 1}` });
-      for (const { id, p } of chunk) {
-        await tx.insert(schema.payoutIntents).values({ id, approvalId, batchId, periodId: period.id, partnerId: p.partnerId, calculationRowId: rowIds.get(p.payoutKey)!, addressVersionId: p.addressVersionId, addressFingerprint: p.addressFingerprint, amountZat: BigInt(p.amountZat), memoRef: `STR-${randomBytes(4).toString('hex').toUpperCase()}`, state: 'approved', idempotencyKey: `${approvalId}:${p.payoutKey}` });
+      for (const { id, p, memoRef } of chunk) {
+        await tx.insert(schema.payoutIntents).values({ id, approvalId, batchId, periodId: period.id, partnerId: p.partnerId, calculationRowId: rowIds.get(p.payoutKey)!, addressVersionId: p.addressVersionId, addressFingerprint: p.addressFingerprint, amountZat: BigInt(p.amountZat), memoRef, memoText: memoFor(memoRef), state: 'approved', idempotencyKey: `${approvalId}:${p.payoutKey}` });
       }
     }
 
-    const partnerIds = new Set([...frozen.payouts.map((p) => p.partnerId), ...frozen.held.map((h) => h.partnerId)]);
+    if (tree) {
+      for (const entry of tree.leaves) {
+        const intent = intents.find((i) => i.p.payoutKey === entry.payoutKey)!;
+        const commitmentId = randomUUID();
+        await tx.insert(schema.payoutCommitments).values({ id: commitmentId, approvalId, payoutIntentId: intent.id, leafIndex: entry.index, leafHash: entry.leafHash, encryptedLeaf: ctx.cipher.encJson('payout_commitments', commitmentId, 'leaf', leaves.get(intent.id)) });
+      }
+    }
+
     for (const partnerId of partnerIds) {
       const intent = intents.find((x) => x.p.partnerId === partnerId);
       const statementId = randomUUID();
-      const [existing] = await tx.select({ id: schema.statements.id, v: schema.statements.documentVersion }).from(schema.statements).where(and(eq(schema.statements.periodId, period.id), eq(schema.statements.partnerId, partnerId)));
+      const existing = existingStatements.get(partnerId);
       const snapshot = { approvalId, revision: period.revision, payouts: frozen.payouts.filter((p) => p.partnerId === partnerId), held: frozen.held.filter((h) => h.partnerId === partnerId) };
       if (existing) {
         await tx.update(schema.statements).set({ payoutIntentId: intent?.id ?? null, documentVersion: existing.v + 1, snapshotEnc: ctx.cipher.encJson('statements', existing.id, 'snapshot', snapshot), evidenceLevel: 'created', generatedAt: new Date() }).where(eq(schema.statements.id, existing.id));
       } else {
-        await tx.insert(schema.statements).values({ id: statementId, projectId: project.id, periodId: period.id, partnerId, payoutIntentId: intent?.id ?? null, reference: `ST-${randomBytes(5).toString('hex').toUpperCase()}`, snapshotEnc: ctx.cipher.encJson('statements', statementId, 'snapshot', snapshot), evidenceLevel: 'created' });
+        await tx.insert(schema.statements).values({ id: statementId, projectId: project.id, periodId: period.id, partnerId, payoutIntentId: intent?.id ?? null, reference: statementRefs.get(partnerId)!, snapshotEnc: ctx.cipher.encJson('statements', statementId, 'snapshot', snapshot), evidenceLevel: 'created' });
       }
     }
-    await audit(ctx.cipher, 'owner', { projectId: project.id, eventType: 'period.approved', objectType: 'period', objectId: period.id, diff: { approvalId, revision: period.revision, snapshotHash: period.frozenSnapshotHash, payouts: intents.length, batches: chunks.length, totalZat: frozen.totalZat } }, tx);
+    await audit(ctx.cipher, 'owner', { projectId: project.id, eventType: 'period.approved', objectType: 'period', objectId: period.id, diff: { approvalId, revision: period.revision, snapshotHash: period.frozenSnapshotHash, payoutRoot: tree?.root ?? null, payouts: intents.length, batches: chunks.length, totalZat: frozen.totalZat } }, tx);
   });
   return { approvalId };
 }

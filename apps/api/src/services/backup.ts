@@ -26,6 +26,7 @@ const TABLES = {
   period_exceptions: schema.periodExceptions,
   approvals: schema.approvals,
   payout_intents: schema.payoutIntents,
+  payout_commitments: schema.payoutCommitments,
   payment_batches: schema.paymentBatches,
   chain_transactions: schema.chainTransactions,
   payment_outputs: schema.paymentOutputs,

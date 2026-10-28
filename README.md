@@ -112,6 +112,7 @@ cd services/signer && cargo clippy --all-targets -- -D warnings && cargo test
 - **Backups.** Settings, then Security, downloads an encrypted backup of every table. Restore it into a fresh database with `pnpm --filter @setrya/api restore-backup <file>`. Restoring needs the backup password, the same master key and the vault passphrase. Wallet keys are never included, so keep the signer's 24 words separately.
 - **Lost owner password.** Run `pnpm --filter @setrya/api owner:reset-password` on the host. It revokes all sessions and leaves the vault alone.
 - **Exports.** `node scripts/decrypt-export.mjs <file>` opens password-encrypted statement archives.
+- **Verify a payout.** `node scripts/verify-payout.mjs <proof.json | bundle.json>` checks a partner's proof file or an auditor's commitment bundle with its own implementation, so it needs nothing from Setrya. See [Verifiable payouts](https://setrya.xyz/docs/verifiable-payouts).
 
 ## Known limits
 

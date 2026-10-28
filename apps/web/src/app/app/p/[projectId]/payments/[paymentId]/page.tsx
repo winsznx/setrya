@@ -69,6 +69,8 @@ export default async function PaymentPage({ params }: { params: Promise<{ projec
           <DefinitionList items={[
             { term: 'Payout intent', detail: <code className="font-mono text-[0.75rem]">{d.intent.idempotencyKey}</code> },
             { term: 'Approval snapshot', detail: <code className="font-mono text-[0.75rem]">{d.approval.snapshotHash}</code> },
+            ...(d.approval.payoutRoot ? [{ term: 'Payout commitment', detail: <code className="break-all font-mono text-[0.75rem]">{d.approval.payoutRoot}</code> }] : []),
+            ...(d.intent.memoText ? [{ term: 'Payment memo', detail: <code className="break-all font-mono text-[0.75rem]">{d.intent.memoText}</code> }] : []),
             ...d.txs.map((t) => ({ term: `Attempt lineage ${t.lineage}`, detail: <span>{t.state.toLowerCase().replaceAll('_', ' ')}{t.pcztHash ? ` · PCZT ${t.pcztHash.slice(0, 12)}…` : ''}{t.diagnosis ? ` · ${t.diagnosis}` : ''}{t.lastError ? ` · ${t.lastError}` : ''}</span> })),
           ]} />
           <ol className="space-y-1.5 border-t border-border pt-3 text-body-s">

@@ -93,6 +93,11 @@ if (process.env.FAULT === 'mismatch' || process.env.FAULT === 'transparent') {
     const recipient = await browser.newPage({ viewport: { width: 390, height: 844 } });
     await recipient.goto(link);
     await recipient.getByText('A private statement was shared with you').waitFor({ timeout: 20000 });
+    await recipient.getByRole('heading', { name: 'Verify this payout' }).waitFor();
+    await recipient.getByText('All checks passed').waitFor();
+    const memo = await recipient.locator('code', { hasText: 'setrya:v1 ref=' }).first().innerText();
+    await recipient.getByLabel('Paste the memo your wallet shows to compare').fill(memo);
+    await recipient.getByText('Your wallet’s memo matches').waitFor();
     await shot('37-recipient-mobile', recipient);
     const html = await recipient.content();
     if (/Partner [AB]/.test(html) && html.includes('Partner A') && html.includes('Partner B')) throw new Error('Recipient view exposes another partner');

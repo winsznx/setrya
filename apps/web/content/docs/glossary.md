@@ -106,6 +106,14 @@ A span of time, such as a month, whose eligible fees Setrya turns into what each
 
 The frozen record of everything a period's payouts depend on: the source rows, agreement versions, rates, address versions and the payer account. Setrya hashes it, and your approval is bound to that hash. If any input changes, the approval stops matching.
 
+### Payout commitment
+
+A Merkle root over every payout in an approved snapshot, stored on the approval and carried in each payment's memo. Each partner's statement includes a proof that their line is in it. See [Verifiable payouts](/docs/verifiable-payouts).
+
+### Merkle root
+
+A single hash that commits to a list of items. A short proof shows that one item is in the list without revealing the others. Setrya salts each item so the other hashes in a proof give nothing away.
+
 ### Exception
 
 A row or payout that needs your decision before it can be paid, such as an unclassified row or an address that failed its check. An exception holds only the payouts it affects.

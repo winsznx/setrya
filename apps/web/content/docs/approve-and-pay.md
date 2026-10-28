@@ -35,7 +35,7 @@ If any check fails, the page says **Approval blocked** and lists them. Review an
 3. Enter your password in **Confirm with your password**.
 4. Select **Freeze and approve N payments**.
 
-Approval records the snapshot against the payer account and network, creates one payout per partner, splits them into transactions, and issues each partner's statement. Nothing is signed or sent. The period page then says **Approved, ready to prepare the transaction**: "Approval is not payment."
+Approval records the snapshot against the payer account and network, creates one payout per partner, splits them into transactions, and issues each partner's statement. It also builds the payout commitment, a Merkle root over every approved payout, and puts it in each payment's memo as `setrya:v1 ref=<payment reference> root=<commitment>`. See [Verifiable payouts](/docs/verifiable-payouts). Nothing is signed or sent. The period page then says **Approved, ready to prepare the transaction**: "Approval is not payment."
 
 Payouts are grouped into transactions of up to **Maximum recipients per transaction**, 10 by default. Each transaction is prepared and authorised on its own.
 

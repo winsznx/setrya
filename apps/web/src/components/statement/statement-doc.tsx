@@ -94,6 +94,7 @@ export function StatementDoc({ doc, page }: { doc: StatementDocument; page?: boo
             {doc.payment.confirmedAt && <><dt className="text-[#545a66]">Payment date</dt><dd>{dateTime(doc.payment.confirmedAt, tz)}</dd></>}
             {doc.payment.memoRef && <><dt className="text-[#545a66]">Payment reference</dt><dd className="font-mono text-[0.8125rem]">{doc.payment.memoRef}</dd></>}
             <dt className="text-[#545a66]">Transaction ID</dt><dd className="break-all font-mono text-[0.75rem]">{doc.payment.txid ?? 'Not broadcast'}</dd>
+            {doc.commitment && <><dt className="text-[#545a66]">Commitment</dt><dd className="break-all font-mono text-[0.75rem]">{doc.commitment.root}</dd></>}
             {doc.acknowledgment && <><dt className="text-[#545a66]">Recipient</dt><dd>Self-attested receipt on {dateTime(doc.acknowledgment.at, tz)}. A declaration by the recipient, not cryptographic proof.</dd></>}
           </dl>
           <p className="mt-3 text-[0.75rem] text-[#545a66]">Shielded transfer details are verified only by authorised wallet views, not public explorers. A transaction ID shows that a transaction exists; it does not reveal the recipient or the amount, and it may include other recipients.</p>

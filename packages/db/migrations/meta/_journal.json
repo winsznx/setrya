@@ -15,6 +15,13 @@
       "when": 1793182071281,
       "tag": "0001_payout_batch",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793230751365,
+      "tag": "0002_payout_commitments",
+      "breakpoints": true
     }
   ]
 }

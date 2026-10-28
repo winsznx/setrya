@@ -60,6 +60,7 @@ export default async function ClosePage({ params }: { params: Promise<{ projectI
             <div className="flex flex-wrap gap-2 pt-1">
               <Link prefetch={false} href={p(`/statements?period=${periodId}`)} className={buttonClasses({ variant: 'secondary', size: 'sm' })}>Statements</Link>
               <a href={`/api/v1/projects/${project.id}/periods/${periodId}/report`} className={buttonClasses({ variant: 'secondary', size: 'sm' })}><Icon name="download" size={15} /> Period report (owner only)</a>
+              <a href={`/api/v1/projects/${project.id}/periods/${periodId}/commitments`} className={buttonClasses({ variant: 'secondary', size: 'sm' })}><Icon name="download" size={15} /> Download commitment bundle</a>
             </div>
           </div>
         </Panel>

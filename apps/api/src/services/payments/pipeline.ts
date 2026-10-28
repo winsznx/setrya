@@ -109,7 +109,7 @@ export async function prepareBatch(ctx: UnlockedContext, batchId: string): Promi
   await attempt(batch.id, txId, 'prepare', 'started');
 
   const outputs = await expectedOutputs(ctx.cipher, intents);
-  const memos = new Map(intents.map((i) => [i.id, i.memoRef]));
+  const memos = new Map(intents.map((i) => [i.id, i.memoText ?? i.memoRef]));
   try {
     const created = await adapter.createPczt(outputs, memos, minConf);
     const { review } = await adapter.inspect(created.pczt, created.privacy_policy, outputs);

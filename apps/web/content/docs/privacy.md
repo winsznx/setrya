@@ -56,6 +56,8 @@ Links expire after the number of days set in **Settings**, then **Privacy and da
 
 ## Proof of payment
 
+Each partner can prove their payout is part of the approved snapshot without seeing anyone else's line. The proof uses a salted Merkle commitment carried in their encrypted payment memo, and it's checked in their browser. See [Verifiable payouts](/docs/verifiable-payouts).
+
 Setrya never asks for or shares a full viewing key. Payment disclosure proofs, ZIP 311, are still a draft without Ironwood support, so Setrya doesn't offer a "verified payment proof". A statement keeps three things apart: the confirmations Setrya observed on the chain, what your own wallet reports, and a partner's own acknowledgment, which is labelled as their declaration.
 
 ## Exports and retention

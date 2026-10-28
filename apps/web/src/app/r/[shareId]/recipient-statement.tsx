@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { ShareError } from '@/components/recipient/share-error';
 import { useShare } from '@/components/recipient/use-share';
 import { StatementDoc } from '@/components/statement/statement-doc';
+import { VerifyPayout } from '@/components/statement/verify-payout';
 import { Button, buttonClasses } from '@/components/ui/button';
 import { Callout, Skeleton } from '@/components/ui/card';
 import { CopyButton } from '@/components/ui/copy-button';
@@ -30,11 +31,12 @@ export function RecipientStatement({ shareId }: { shareId: string }) {
         </div>
       </section>
       {doc.payment.status !== 'confirmed' && doc.totals.zat && <Callout tone="warning">The issuer has not yet observed this payment confirmed on chain. Check the status again later.</Callout>}
+      <VerifyPayout doc={doc} />
       <StatementDoc doc={doc} />
       <Dialog open={help} onClose={() => setHelp(false)} title="Checking the payment yourself">
         <ol className="list-decimal space-y-2 pl-5 text-body-s text-ink-secondary">
           <li>Open a Zcash wallet that controls the address you gave the issuer.</li>
-          <li>Look for an incoming shielded transaction{doc.payment.txid ? <> with ID <code className="break-all font-mono text-[0.75rem]">{doc.payment.txid}</code></> : ''}{doc.payment.memoRef ? <> and memo <code className="font-mono">{doc.payment.memoRef}</code></> : ''}.</li>
+          <li>Look for an incoming shielded transaction{doc.payment.txid ? <> with ID <code className="break-all font-mono text-[0.75rem]">{doc.payment.txid}</code></> : ''}{doc.payment.memoRef ? <> and a memo that starts <code className="font-mono">setrya:v1 ref={doc.payment.memoRef}</code></> : ''}.</li>
           <li>Compare the amount with this statement. A public block explorer cannot show it, because the transfer is shielded.</li>
         </ol>
         <p className="mt-3 text-body-s text-ink-secondary">Never share your seed phrase or viewing key to prove a payment. The issuer will not ask for it.</p>

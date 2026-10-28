@@ -52,6 +52,8 @@ The link opens a page with that one statement, decrypted in their browser. They 
 - select **How to verify with your wallet**, which explains how to find the incoming shielded transaction in a wallet that controls their address, and warns "Never share your seed phrase or viewing key to prove a payment. The issuer will not ask for it.",
 - select **Acknowledge receipt**, tick **I confirm that I checked the payment in a wallet I control**, add an optional **Comment** of up to 280 characters, and select **Send acknowledgment**.
 
+At the top, **Verify this payout** checks that their line is part of the approved payment and that their payment memo carries the same commitment. See [Verify a payout](#verify-a-payout).
+
 If the payment isn't confirmed yet, the page says "The issuer has not yet observed this payment confirmed on chain. Check the status again later."
 
 If the link can't open, the partner sees one of these.
@@ -64,6 +66,10 @@ If the link can't open, the partner sees one of these.
 | This link was revoked | You withdrew it. A copy they downloaded earlier is still theirs. |
 | Statement is temporarily unavailable | Try again in a moment. |
 | You appear to be offline | Reconnect and reload. |
+
+## Verify a payout
+
+Statements for periods approved with a payout commitment carry the partner's committed line and a proof. The panel shows three checks, the memo their wallet should display, and a box to paste their wallet's memo to compare. **Download proof file** saves the proof for the open-source verifier. The statement's **Payment** section also shows the **Commitment**. [Verifiable payouts](/docs/verifiable-payouts) explains what this proves and what it doesn't.
 
 ## Export several statements
 

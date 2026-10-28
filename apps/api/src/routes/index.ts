@@ -33,6 +33,7 @@ import * as projectsProjectIdPartnersRoute from './v1/projects/[projectId]/partn
 import * as projectsProjectIdPaymentsExportRoute from './v1/projects/[projectId]/payments/export/route';
 import * as projectsProjectIdPeriodsPeriodIdApproveRoute from './v1/projects/[projectId]/periods/[periodId]/approve/route';
 import * as projectsProjectIdPeriodsPeriodIdCloseRoute from './v1/projects/[projectId]/periods/[periodId]/close/route';
+import * as projectsProjectIdPeriodsPeriodIdCommitmentsRoute from './v1/projects/[projectId]/periods/[periodId]/commitments/route';
 import * as projectsProjectIdPeriodsPeriodIdDiscardRoute from './v1/projects/[projectId]/periods/[periodId]/discard/route';
 import * as projectsProjectIdPeriodsPeriodIdExceptionsExceptionIdPreviewRoute from './v1/projects/[projectId]/periods/[periodId]/exceptions/[exceptionId]/preview/route';
 import * as projectsProjectIdPeriodsPeriodIdExceptionsExceptionIdResolveRoute from './v1/projects/[projectId]/periods/[periodId]/exceptions/[exceptionId]/resolve/route';
@@ -110,6 +111,7 @@ export function registerRoutes(app: Hono<AppEnv>): void {
   app.get('/api/v1/projects/:projectId/periods/:periodId', projectsProjectIdPeriodsPeriodIdRoute.GET);
   app.post('/api/v1/projects/:projectId/periods/:periodId/approve', projectsProjectIdPeriodsPeriodIdApproveRoute.POST);
   app.post('/api/v1/projects/:projectId/periods/:periodId/close', projectsProjectIdPeriodsPeriodIdCloseRoute.POST);
+  app.get('/api/v1/projects/:projectId/periods/:periodId/commitments', projectsProjectIdPeriodsPeriodIdCommitmentsRoute.GET);
   app.post('/api/v1/projects/:projectId/periods/:periodId/discard', projectsProjectIdPeriodsPeriodIdDiscardRoute.POST);
   app.post('/api/v1/projects/:projectId/periods/:periodId/exceptions/:exceptionId/preview', projectsProjectIdPeriodsPeriodIdExceptionsExceptionIdPreviewRoute.POST);
   app.post('/api/v1/projects/:projectId/periods/:periodId/exceptions/:exceptionId/resolve', projectsProjectIdPeriodsPeriodIdExceptionsExceptionIdResolveRoute.POST);

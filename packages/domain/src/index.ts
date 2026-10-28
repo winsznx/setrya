@@ -10,3 +10,4 @@ export * from './snapshot';
 export * from './states';
 export * from './address';
 export * from './wire';
+export * from './payout-tree';

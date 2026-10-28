@@ -2,6 +2,7 @@ import { getDb, schema, eq, and, desc, isNull } from '@setrya/db';
 import { decToString, describeRate, describeTerms, type FormulaTrail, parseDec, type PaymentStatus, type SnapshotPayout, sum, type TxState } from '@setrya/domain';
 
 import { getAgreement } from './agreements';
+import { statementCommitment, type StatementCommitment } from './commitments';
 import { getPartner } from './partners';
 import { getPeriod, periodRows } from './periods';
 import type { ProjectView } from './projects';
@@ -10,6 +11,7 @@ import type { UnlockedContext } from './session';
 import { listSources } from './sources';
 
 export { WATERMARK, type PaymentStatus } from '@setrya/domain';
+export type { StatementCommitment } from './commitments';
 
 export interface StatementLine {
   agreementTitle: string;
@@ -51,6 +53,11 @@ export interface StatementDocument {
   };
   acknowledgment: { kind: string; at: string } | null;
   issuerNote: string;
+  /**
+   * This partner's lines in the approval's payout tree, with an inclusion proof each, so the partner can check them
+   * against the root carried in their payment memo. Null for approvals made before payout commitments existed.
+   */
+  commitment: StatementCommitment | null;
 }
 
 export interface StatementSummary {
@@ -143,6 +150,7 @@ export async function buildStatement(ctx: UnlockedContext, project: ProjectView,
     payment: { status, txState, txid: tx?.txid ?? null, confirmations: tx?.confirmations ?? 0, targetConfirmations: project.targetConfirmations, confirmedAt: txState === 'CONFIRMED' ? (tx?.minedAt?.toISOString() ?? null) : null, network: approval?.network ?? '', walletObserved: tx?.walletObservedAt != null, memoRef: intent?.memoRef ?? null },
     acknowledgment: ack ? { kind: ack.kind, at: ack.at.toISOString() } : null,
     issuerNote: `This statement is issued by ${project.issuerLabel}. Setrya is not independently validating the project's fee records.`,
+    commitment: await statementCommitment(ctx, snapshot.approvalId, st.partnerId),
   };
 }
 

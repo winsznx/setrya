@@ -326,6 +326,8 @@ export const approvals = pgTable('approvals', {
   network: text('network').notNull(),
   accountId: text('account_id').notNull(),
   totalZat: zat('total_zat').notNull(),
+  /** Merkle root over the approved payout lines. Null for approvals made before payout commitments existed. */
+  payoutRoot: text('payout_root'),
   invalidatedAt: timestamp('invalidated_at', { withTimezone: true }),
   invalidationReason: text('invalidation_reason'),
 }, (t) => [uniqueIndex('approvals_period_revision').on(t.periodId, t.revision)]);
@@ -341,6 +343,8 @@ export const payoutIntents = pgTable('payout_intents', {
   addressFingerprint: text('address_fingerprint').notNull(),
   amountZat: zat('amount_zat').notNull(),
   memoRef: text('memo_ref').notNull(),
+  /** The memo sent with the payment. Carries the payout root when the approval has one; else the plain reference. */
+  memoText: text('memo_text'),
   state: text('state').notNull(),
   idempotencyKey: text('idempotency_key').notNull().unique(),
   chainTransactionId: uuid('chain_transaction_id'),
@@ -348,6 +352,17 @@ export const payoutIntents = pgTable('payout_intents', {
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 });
+
+/** One leaf of an approval's payout tree. The leaf, salt included, is field-encrypted; only its hash is in clear. */
+export const payoutCommitments = pgTable('payout_commitments', {
+  id: id(),
+  approvalId: uuid('approval_id').notNull().references(() => approvals.id),
+  payoutIntentId: uuid('payout_intent_id').notNull().unique().references(() => payoutIntents.id),
+  leafIndex: integer('leaf_index').notNull(),
+  leafHash: text('leaf_hash').notNull(),
+  encryptedLeaf: text('encrypted_leaf').notNull(),
+  createdAt: createdAt(),
+}, (t) => [uniqueIndex('payout_commitments_approval_leaf').on(t.approvalId, t.leafIndex)]);
 
 export const paymentBatches = pgTable('payment_batches', {
   id: id(),

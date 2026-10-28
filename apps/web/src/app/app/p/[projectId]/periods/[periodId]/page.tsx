@@ -33,7 +33,7 @@ export default async function PeriodPage({ params, searchParams }: { params: Pro
     { label: 'Calculated', state: period.calculatedAt ? 'done' : 'current', detail: period.calculatedAt ? `Revision ${period.revision}` : undefined },
     { label: 'Exceptions resolved', state: blocking.length === 0 ? 'done' : 'blocked', detail: blocking.length ? `${blocking.length} open` : `${exceptions.length} total` },
     { label: 'Frozen', state: period.frozenAt ? 'done' : st === 'draft' ? 'todo' : 'current', detail: period.frozenSnapshotHash ? `Snapshot ${period.frozenSnapshotHash.slice(0, 10)}…` : undefined },
-    { label: 'Approved', state: d.approval ? 'done' : st === 'review' ? 'current' : 'todo', detail: d.approval ? formatDateTime(d.approval.approvedAt, project.timezone) : undefined },
+    { label: 'Approved', state: d.approval ? 'done' : st === 'review' ? 'current' : 'todo', detail: d.approval ? `${formatDateTime(d.approval.approvedAt, project.timezone)}${d.approval.payoutRoot ? ` · commitment ${d.approval.payoutRoot.slice(0, 10)}…` : ''}` : undefined },
     { label: 'Prepared', state: anyTx ? 'done' : st === 'approved' ? 'current' : 'todo' },
     { label: 'Broadcast', state: d.batches.some((b) => b.tx?.broadcastAt) ? 'done' : 'todo' },
     { label: 'Confirmed', state: d.batches.length > 0 && d.batches.every((b) => b.txState === 'CONFIRMED') ? 'done' : d.batches.some((b) => b.txState === 'CONFIRMED') ? 'current' : 'todo', detail: d.batches.length ? `${d.batches.filter((b) => b.txState === 'CONFIRMED').length} of ${d.batches.length} transaction(s)` : undefined },
