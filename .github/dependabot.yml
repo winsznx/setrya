@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule: { interval: weekly }
+    open-pull-requests-limit: 5
+  - package-ecosystem: cargo
+    directory: /services/signer
+    schedule: { interval: weekly }
+    # librustzcash crates are pinned to one git revision and move together, by hand.
+    ignore:
+      - dependency-name: "zcash_*"
+      - dependency-name: "pczt"
+      - dependency-name: "orchard"
+      - dependency-name: "sapling-crypto"
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: weekly }
+  - package-ecosystem: docker
+    directory: /infra/docker
+    schedule: { interval: weekly }
