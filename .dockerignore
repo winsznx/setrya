@@ -1,0 +1,11 @@
+**/node_modules
+**/.next
+**/dist
+**/target
+.git
+.env*
+**/.env*
+secrets
+internal
+tests/e2e/artifacts
+*.tsbuildinfo

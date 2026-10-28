@@ -1,0 +1,22 @@
+{
+  "name": "setrya",
+  "private": true,
+  "license": "MIT OR Apache-2.0",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev:api": "pnpm --filter @setrya/api dev",
+    "dev:web": "pnpm --filter @setrya/web dev",
+    "build": "pnpm --filter @setrya/api build && pnpm --filter @setrya/web build",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test",
+    "test:journeys": "bash tests/e2e/run-journeys.sh",
+    "db:generate": "pnpm --filter @setrya/db generate",
+    "db:migrate": "pnpm --filter @setrya/db migrate"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}
