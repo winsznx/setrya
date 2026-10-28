@@ -19,3 +19,7 @@ updates:
   - package-ecosystem: docker
     directory: /infra/docker
     schedule: { interval: weekly }
+    # The image tracks Node 22 LTS, matching engines and CI. Majors move by hand.
+    ignore:
+      - dependency-name: node
+        update-types: ["version-update:semver-major"]
