@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: 'Getting started' };
 export default function GettingStarted() {
   return (
     <>
-      <PageIntro title="Getting started">From a fresh server to a first reviewed period. Read each warning; this software moves real money.</PageIntro>
+      <PageIntro eyebrow="Self-hosting" title="Getting started">From a fresh server to a first reviewed period. Read each warning; this software moves real money.</PageIntro>
       <Prose>
         <p><strong>Start on testnet.</strong> The signer builds on pre-release Zcash libraries, and Zallet is beta software. Use limited, consenting amounts on mainnet.</p>
         <h2>1. Requirements</h2>

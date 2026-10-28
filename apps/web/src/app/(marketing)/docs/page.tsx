@@ -1,30 +1,41 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import { CONTAINER, IconDisc } from '@/components/landing/primitives';
 import { PageIntro, Prose } from '@/components/marketing/prose';
+import type { IconName } from '@/components/ui/icons';
 
 export const metadata: Metadata = { title: 'Documentation' };
 
-const CARDS: [string, string, string][] = [
-  ['Quick start', '/docs/getting-started', 'Install, provision the owner, connect the wallet, run a first period.'],
-  ['Supported network and deployment', '#deployment', 'Linux settlement host, wallet service, PostgreSQL.'],
-  ['Import formats', '#imports', 'CSV columns, dates, decimals, duplicates.'],
-  ['Agreement rules', '#agreements', 'Percentages, fixed amounts, caps, refunds, pools.'],
-  ['Wallet setup', '/docs/getting-started#wallet', 'Server-side connection settings.'],
-  ['Privacy boundaries', '/privacy', 'What is protected and what is not.'],
-  ['How confirmations work', '#confirmations', 'From prepared to confirmed, and recovery.'],
-  ['Troubleshooting', '#troubleshooting', 'Common blocked states and what to do.'],
-  ['Backup and recovery', '#backup', 'Setrya backups versus wallet backups.'],
-  ['Technical references', '#references', 'Zcash, librustzcash, Zallet and Zebra documentation.'],
+const CARDS: [string, string, string, IconName][] = [
+  ['Quick start', '/docs/getting-started', 'Install, provision the owner, connect the wallet, run a first period.', 'upload'],
+  ['Supported network and deployment', '#deployment', 'Linux settlement host, wallet service, PostgreSQL.', 'settings'],
+  ['Import formats', '#imports', 'CSV columns, dates, decimals, duplicates.', 'file'],
+  ['Agreement rules', '#agreements', 'Percentages, fixed amounts, caps, refunds, pools.', 'agreements'],
+  ['Wallet setup', '/docs/getting-started#wallet', 'Server-side connection settings.', 'wallet'],
+  ['Privacy boundaries', '/privacy', 'What is protected and what is not.', 'shield'],
+  ['How confirmations work', '#confirmations', 'From prepared to confirmed, and recovery.', 'clock'],
+  ['Troubleshooting', '#troubleshooting', 'Common blocked states and what to do.', 'alert'],
+  ['Backup and recovery', '#backup', 'Setrya backups versus wallet backups.', 'download'],
+  ['Technical references', '#references', 'Zcash, librustzcash, Zallet and Zebra documentation.', 'external'],
 ];
 
 export default function Docs() {
   return (
     <>
-      <PageIntro title="Documentation">How to run Setrya, and what each part of it does.</PageIntro>
-      <div className="mx-auto grid max-w-content gap-3 px-4 pt-10 sm:grid-cols-2 md:px-8 lg:grid-cols-3">
-        {CARDS.map(([t, href, b]) => <Link key={t} href={href} className="rounded-panel border border-border p-4 hover:border-border-strong"><span className="text-h3">{t}</span><span className="mt-1 block text-body-s text-ink-secondary">{b}</span></Link>)}
-      </div>
+      <PageIntro eyebrow="Documentation" title="Documentation">How to run Setrya, and what each part of it does.</PageIntro>
+      <nav aria-label="Documentation topics" className={`${CONTAINER} pt-12`}>
+        <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
+          {CARDS.map(([t, href, b, icon]) => (
+            <li key={t}>
+              <Link prefetch={false} href={href} className="flex h-full gap-4 rounded-workspace border border-border bg-surface p-card shadow-raised transition-colors duration-fast hover:border-border-strong md:p-6">
+                <IconDisc name={icon} className="bg-accent-soft shadow-none" />
+                <span className="min-w-0"><span className="block text-h3 text-ink">{t}</span><span className="mt-1 block text-body-s text-ink-secondary">{b}</span></span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
       <Prose>
         <h2 id="deployment">Supported network and deployment</h2>
         <p>Setrya is single-tenant and self-hosted: one owner per installation. The web app can run on a host like Vercel. The API, PostgreSQL 16 and the wallet service run on your Linux settlement host. The default wallet service is the Setrya signer, a light-client wallet built on librustzcash that reads the chain from a lightwalletd server. Zallet with a Zebra node on the same machine works through the same connection once a Zallet release supports NU7. Without a wallet connection, Setrya runs in accounting mode: imports, calculations and reviews work, and sending stays locked.</p>

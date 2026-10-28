@@ -61,7 +61,8 @@
   --radius-control: 10px;
   --radius-row: 12px;
   --radius-panel: 14px;
-  --radius-workspace: 20px;
+  --radius-module: 18px;
+  --radius-workspace: 22px;
   --radius-pill: 999px;
 
   --shadow-raised: 0 1px 2px rgba(16, 18, 24, 0.06), 0 4px 12px rgba(16, 18, 24, 0.05);
@@ -76,8 +77,59 @@
   --duration-standard: 220ms;
   --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
   --motion-distance: 6px;
+
+  /* Indigo ramp for the stage and accent fills. The stage carries no text of its own: content sits on
+     white cards or on --glass-deep. */
+  --palette-indigo-50: #f3f4fe;
+  --palette-indigo-100: #e4e7fd;
+  --palette-indigo-200: #c9cdf3;
+  --palette-indigo-300: #a2a9ee;
+  --palette-indigo-500: #4a51c9;
+  --palette-indigo-600: #3138a8;
+  --palette-indigo-700: #262c8a;
+  --palette-indigo-800: #1d2169;
+  --palette-indigo-900: #14174a;
+  --palette-indigo-950: #0c0e2e;
+
+  --gradient-stage:
+    radial-gradient(110% 85% at 92% 100%, rgba(217, 162, 27, 0.30) 0%, rgba(217, 162, 27, 0) 55%),
+    radial-gradient(120% 90% at 12% 8%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 58%),
+    linear-gradient(158deg, var(--palette-indigo-100) 0%, var(--palette-indigo-200) 40%, var(--palette-indigo-500) 100%);
+  --gradient-band:
+    radial-gradient(90% 120% at 85% 0%, rgba(217, 162, 27, 0.22) 0%, rgba(217, 162, 27, 0) 60%),
+    linear-gradient(160deg, var(--palette-indigo-800) 0%, var(--palette-indigo-950) 100%);
+  --gradient-panel-soft: linear-gradient(160deg, #f7f8fa 0%, #eceef3 100%);
+  --glass-deep: rgba(12, 14, 46, 0.74);
+  --glass-deep-border: rgba(255, 255, 255, 0.22);
+  --glass-light: rgba(255, 255, 255, 0.9);
+  --glass-light-border: rgba(255, 255, 255, 0.6);
+
+  /* Type roles. Display steps scale with the viewport; the first value is the size at 360 px. */
+  --text-display-xl-size: clamp(2.375rem, 1.4rem + 4.3vw, 4.5rem);
+  --text-display-l-size: clamp(1.875rem, 1.35rem + 2.35vw, 3.125rem);
+  --text-body-l-size: 0.9375rem;
+
+  /* Layout rhythm. Gutter and section step up at the breakpoints below. */
+  --layout-gutter: 1rem;
+  --layout-section: 4rem;
+  --layout-content: 75rem;
+  --layout-card-padding: 1rem;
 }
 
+@media (min-width: 768px) {
+  :root {
+    --layout-gutter: 1.25rem;
+    --layout-section: 6.5rem;
+    --layout-card-padding: 1.25rem;
+    --text-body-l-size: 1.0625rem;
+  }
+}
+@media (min-width: 1024px) {
+  :root { --layout-gutter: 1.625rem; }
+}
+@media (min-width: 1440px) {
+  :root { --layout-gutter: 2.25rem; }
+}
 @media (prefers-reduced-motion: reduce) {
   :root { --motion-distance: 0px; --duration-standard: 1ms; --duration-fast: 1ms; }
 }
@@ -127,6 +179,13 @@
   --shadow-raised: 0 0 0 1px rgba(255, 255, 255, 0.06);
   --shadow-workspace: 0 0 0 1px rgba(255, 255, 255, 0.05);
   --shadow-floating: 0 16px 48px rgba(0, 0, 0, 0.6);
+  --gradient-stage:
+    radial-gradient(110% 85% at 92% 100%, rgba(217, 162, 27, 0.20) 0%, rgba(217, 162, 27, 0) 55%),
+    radial-gradient(120% 90% at 12% 8%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 58%),
+    linear-gradient(158deg, var(--palette-indigo-950) 0%, #10123a 45%, var(--palette-indigo-800) 100%);
+  --gradient-panel-soft: linear-gradient(160deg, #1c1d22 0%, #16171b 100%);
+  --glass-light: rgba(15, 16, 19, 0.84);
+  --glass-light-border: rgba(255, 255, 255, 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -174,5 +233,12 @@
   --shadow-raised: 0 0 0 1px rgba(255, 255, 255, 0.06);
   --shadow-workspace: 0 0 0 1px rgba(255, 255, 255, 0.05);
   --shadow-floating: 0 16px 48px rgba(0, 0, 0, 0.6);
+  --gradient-stage:
+    radial-gradient(110% 85% at 92% 100%, rgba(217, 162, 27, 0.20) 0%, rgba(217, 162, 27, 0) 55%),
+    radial-gradient(120% 90% at 12% 8%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 58%),
+    linear-gradient(158deg, var(--palette-indigo-950) 0%, #10123a 45%, var(--palette-indigo-800) 100%);
+  --gradient-panel-soft: linear-gradient(160deg, #1c1d22 0%, #16171b 100%);
+  --glass-light: rgba(15, 16, 19, 0.84);
+  --glass-light-border: rgba(255, 255, 255, 0.1);
 }
 }

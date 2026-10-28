@@ -146,7 +146,7 @@ export function AppShell(props: ShellProps) {
         </aside>
 
         <div className="flex min-w-0 flex-1 flex-col bg-canvas md:my-3 md:mr-3 md:rounded-workspace md:shadow-workspace">
-          <header className="sticky top-0 z-40 flex h-14 items-center gap-2 border-b border-border bg-canvas/95 px-4 backdrop-blur md:h-topbar md:rounded-t-workspace md:px-7">
+          <header className="sticky top-0 z-40 flex h-14 items-center gap-2 border-b border-border bg-canvas/90 px-gutter backdrop-blur-md md:h-topbar md:rounded-t-workspace">
             <div className="min-w-0 flex-1 md:hidden">
               <ProjectSwitcher {...props} compact />
             </div>
@@ -164,7 +164,7 @@ export function AppShell(props: ShellProps) {
               <NetworkBadge network={network} />
             </div>
           </header>
-          <main id="main-content" tabIndex={-1} className="min-w-0 flex-1 px-4 pb-28 pt-5 focus:outline-none md:px-7 md:pb-12 md:pt-7 lg:px-9">
+          <main id="main-content" tabIndex={-1} className="min-w-0 flex-1 px-gutter pb-28 pt-6 focus:outline-none md:pb-14 md:pt-9">
             <div className="mx-auto max-w-content">{children}</div>
           </main>
         </div>

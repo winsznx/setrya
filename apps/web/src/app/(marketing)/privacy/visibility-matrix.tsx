@@ -20,13 +20,13 @@ export function VisibilityMatrix() {
   const [role, setRole] = useState<Role>('operator');
   return (
     <section aria-labelledby="matrix-title">
-      <h2 id="matrix-title" className="text-h1">What each party can see</h2>
-      <div role="tablist" aria-label="Choose a viewpoint" className="mt-4 inline-flex rounded-pill bg-surface-muted p-1">
+      <h2 id="matrix-title" className="text-display-l text-ink">What each party can see</h2>
+      <div role="tablist" aria-label="Choose a viewpoint" className="mt-6 inline-flex max-w-full flex-wrap rounded-pill bg-surface-muted p-1">
         {(Object.keys(LABEL) as Role[]).map((r) => (
           <button key={r} role="tab" aria-selected={role === r} onClick={() => setRole(r)} className={cx('rounded-pill px-4 py-2 text-body-s font-medium', role === r ? 'bg-brand text-on-brand' : 'text-ink-secondary hover:text-ink')}>{LABEL[r]}</button>
         ))}
       </div>
-      <dl role="tabpanel" className="mt-4 divide-y divide-border rounded-panel border border-border">
+      <dl role="tabpanel" className="mt-6 divide-y divide-border overflow-hidden rounded-workspace border border-border bg-surface shadow-raised">
         {ROWS.map(([field, v]) => (
           <div key={field} className="grid gap-1 px-4 py-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] sm:gap-6 md:px-5">
             <dt className="text-body-s font-medium">{field}</dt>

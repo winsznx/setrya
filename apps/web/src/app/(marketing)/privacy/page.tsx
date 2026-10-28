@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { CONTAINER } from '@/components/landing/primitives';
 import { PageIntro, Prose } from '@/components/marketing/prose';
 
 import { VisibilityMatrix } from './visibility-matrix';
@@ -9,8 +10,8 @@ export const metadata: Metadata = { title: 'Privacy model', description: 'What S
 export default function PrivacyPage() {
   return (
     <>
-      <PageIntro title="Private onchain settlement. Clear limits.">This page describes the architecture as built. Where something is not protected, it says so.</PageIntro>
-      <div className="mx-auto max-w-content px-4 pt-12 md:px-8"><VisibilityMatrix /></div>
+      <PageIntro eyebrow="Privacy model" title="Private onchain settlement. Clear limits.">This page describes the architecture as built. Where something is not protected, it says so.</PageIntro>
+      <div className={`${CONTAINER} pt-12`}><VisibilityMatrix /></div>
       <Prose>
         <h2>Data the operator holds</h2>
         <p>Your revenue imports, partners, agreements, rates, calculations, approvals, payments, statements and audit log live in PostgreSQL on your server. Sensitive fields are encrypted with AES-256-GCM under a data key. That key is wrapped by a key derived from your vault passphrase (Argon2id) combined with a host master key stored outside the database. Neither alone is enough.</p>

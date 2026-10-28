@@ -33,7 +33,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
 
 export function PageHeader({ crumbs, title, description, actions, meta }: { crumbs?: Crumb[]; title: ReactNode; description?: ReactNode; actions?: ReactNode; meta?: ReactNode }) {
   return (
-    <header className="mb-6 md:mb-8">
+    <header className="mb-7 md:mb-10">
       {crumbs && <Breadcrumbs items={crumbs} />}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div className="min-w-0">

@@ -6,7 +6,7 @@ import { Icon, type IconName } from './icons';
 
 export function Card({ className, children, padded = true, muted = false, ...rest }: HTMLAttributes<HTMLElement> & { padded?: boolean; muted?: boolean }) {
   return (
-    <section className={cx('min-w-0 rounded-panel border border-border', muted ? 'bg-surface-muted' : 'bg-surface', padded && 'p-4 md:p-5', className)} {...rest}>
+    <section className={cx('min-w-0 rounded-module border border-border', muted ? 'bg-surface-muted' : 'bg-surface shadow-raised', padded && 'p-card md:p-6', className)} {...rest}>
       {children}
     </section>
   );
@@ -14,9 +14,9 @@ export function Card({ className, children, padded = true, muted = false, ...res
 
 export function Panel({ title, action, children, className, description }: { title?: ReactNode; action?: ReactNode; children: ReactNode; className?: string; description?: ReactNode }) {
   return (
-    <section className={cx('min-w-0 overflow-hidden rounded-panel border border-border bg-surface', className)}>
+    <section className={cx('min-w-0 overflow-hidden rounded-module border border-border bg-surface shadow-raised', className)}>
       {title !== undefined && (
-        <header className="flex min-h-[3.25rem] flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-border px-4 py-3 md:px-5">
+        <header className="flex min-h-[3.5rem] flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-border px-card py-3.5 md:px-6">
           <div className="min-w-0">
             <h2 className="text-h3">{title}</h2>
             {description && <p className="text-body-s text-ink-secondary">{description}</p>}
@@ -42,13 +42,13 @@ export function MetricCard({ label, value, footnote, href, tone = 'default', exp
           </span>
         )}
       </div>
-      <div className="mt-1.5 text-figure tnum text-ink">{value}</div>
+      <div className="mt-3 text-figure tnum text-ink">{value}</div>
       {footnote && <div className="mt-1 text-body-s text-ink-muted">{footnote}</div>}
     </>
   );
-  const cls = 'block min-w-0 rounded-panel border border-border bg-surface-muted p-4';
+  const cls = 'block min-w-0 rounded-module bg-panel-soft p-card md:p-5';
   return href ? (
-    <Link prefetch={false} href={href} className={cx(cls, 'transition-colors duration-fast hover:border-border-strong hover:bg-surface')}>
+    <Link prefetch={false} href={href} className={cx(cls, 'transition-shadow duration-fast hover:shadow-raised')}>
       {body}
     </Link>
   ) : (

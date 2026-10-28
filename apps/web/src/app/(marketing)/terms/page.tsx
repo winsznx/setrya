@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: 'Terms and limitations' };
 export default function Terms() {
   return (
     <>
-      <PageIntro title="Terms and limitations">This is informational, not legal advice. Setrya is software you run yourself.</PageIntro>
+      <PageIntro eyebrow="Terms" title="Terms and limitations">This is informational, not legal advice. Setrya is software you run yourself.</PageIntro>
       <Prose>
         <h2>Your responsibilities</h2>
         <ul>

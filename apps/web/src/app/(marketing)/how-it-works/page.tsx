@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import { CtaBand } from '@/components/landing/cta-band';
+import { Eyebrow, Section, SplitHeading } from '@/components/landing/primitives';
 import { PageIntro } from '@/components/marketing/prose';
 import { SampleWorksheet } from '@/components/marketing/sample-worksheet';
 
@@ -16,35 +18,39 @@ const STEPS: [string, string, string][] = [
 
 export default function HowItWorks() {
   return (
-    <>
-      <PageIntro title="From fee statement to private settlement">Picture a launch studio paying a promoter 20% and a creator 10% of last month&apos;s fees. The export shows $1,200 of fees, a $50 refund, and a $20,000 line that is trading volume. Here is what happens to it.</PageIntro>
-      <div className="mx-auto max-w-content px-4 py-12 md:px-8">
-        <ol className="space-y-12">
+    <div className="pb-section">
+      <PageIntro eyebrow="How it works" title="From fee statement to private settlement">Picture a launch studio paying a promoter 20% and a creator 10% of last month&apos;s fees. The export shows $1,200 of fees, a $50 refund, and a $20,000 line that is trading volume. Here is what happens to it.</PageIntro>
+      <Section titleId="steps-title">
+        <h2 id="steps-title" className="sr-only">Steps</h2>
+        <ol className="relative space-y-4 md:space-y-6">
           {STEPS.map(([title, body, note], i) => (
-            <li key={title} className="grid gap-6 md:grid-cols-[4rem_minmax(0,1fr)]">
-              <span className="font-serif text-[2.5rem] leading-none text-ink-muted">{i + 1}</span>
-              <div>
-                <h2 className="text-h1">{title}</h2>
-                <p className="mt-3 max-w-reading text-ink-secondary">{body}</p>
-                <p className="mt-2 text-body-s text-ink-muted">{note}</p>
+            <li key={title} className="grid grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-[3rem_minmax(0,1fr)] md:gap-6">
+              <div className="flex md:flex-col md:items-center">
+                <span className="grid size-10 shrink-0 place-items-center rounded-pill bg-accent-soft text-body-s font-semibold text-accent-text">{i + 1}</span>
+                {i < STEPS.length - 1 && <span aria-hidden className="mt-3 hidden w-px flex-1 bg-border md:block" />}
+              </div>
+              <div className="min-w-0 rounded-workspace border border-border bg-surface p-card shadow-raised md:p-6">
+                <h3 className="text-h2 text-ink">{title}</h3>
+                <p className="mt-3 max-w-reading text-body-s text-ink-secondary">{body}</p>
+                <p className="mt-3 rounded-row bg-surface-muted px-3 py-2 text-label text-ink-secondary">{note}</p>
                 {i === 1 && <div className="mt-6 max-w-xl"><SampleWorksheet /></div>}
               </div>
             </li>
           ))}
         </ol>
-        <section className="mt-16 grid gap-4 md:grid-cols-2">
+      </Section>
+      <Section titleId="boundaries-title">
+        <SplitHeading titleId="boundaries-title" eyebrow={<Eyebrow>Privacy boundaries</Eyebrow>} title="Who can see each step." lead={<>The same rules hold at every stage. <Link prefetch={false} href="/privacy" className="font-medium text-accent-text hover:underline">Read the privacy model</Link>.</>} />
+        <div className="mt-10 grid gap-3 md:grid-cols-2 md:gap-4">
           {[
             ['What the operator can see', 'Everything in your project, decrypted only while your workspace is unlocked.'],
             ['What recipients can see', 'Their own statement: fee base, rule, amount, payment status and txid. Nothing about other partners.'],
             ['What the public chain can see', 'That a shielded transaction exists and when it was mined. Not its recipients or amounts.'],
             ['What Setrya cannot hide', 'Timing, your server’s network activity, anything readable by your host administrator, and statements a partner forwards.'],
-          ].map(([t, b]) => <div key={t} className="rounded-panel border border-border p-5"><h2 className="text-h3">{t}</h2><p className="mt-2 text-body-s text-ink-secondary">{b}</p></div>)}
-        </section>
-        <div className="mt-10 flex flex-wrap gap-3">
-          <Link href="/sign-in" className="inline-flex min-h-[3rem] items-center rounded-pill bg-brand px-6 font-medium text-on-brand">Launch workspace</Link>
-          <Link href="/demo" className="inline-flex min-h-[3rem] items-center rounded-pill border border-border-strong px-6 font-medium">Explore the sample</Link>
+          ].map(([t, b]) => <div key={t} className="rounded-workspace bg-panel-soft p-card md:p-6"><h3 className="text-h3 text-ink">{t}</h3><p className="mt-2 text-body-s text-ink-secondary">{b}</p></div>)}
         </div>
-      </div>
-    </>
+      </Section>
+      <CtaBand openHref="/sign-in" />
+    </div>
   );
 }
