@@ -1,5 +1,5 @@
 # Build context: repository root.
-FROM node:22.23.3-bookworm-slim AS build
+FROM node:26.12.0-bookworm-slim AS build
 WORKDIR /repo
 RUN corepack enable
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json tsconfig.base.json ./
@@ -13,7 +13,7 @@ COPY packages packages
 COPY apps/api apps/api
 RUN pnpm --filter @setrya/api build
 
-FROM node:22.23.3-bookworm-slim
+FROM node:26.12.0-bookworm-slim
 ENV NODE_ENV=production SETRYA_MIGRATIONS_DIR=/app/migrations
 WORKDIR /app
 # Only the modules the bundle leaves external: the native Argon2 binding, the Postgres driver and the CommonJS QR encoder.
