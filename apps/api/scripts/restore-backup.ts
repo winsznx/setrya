@@ -1,5 +1,5 @@
 // Restores an encrypted Setrya backup into a fresh, migrated, empty database.
-// Usage: pnpm --filter @setrya/web restore-backup <file>. The same master key file must be configured,
+// Usage: pnpm --filter @setrya/api restore-backup <file>. The same master key file must be configured,
 // and the vault passphrase from backup time unlocks the restored data afterwards.
 import { getDb, schema, sql } from '@setrya/db';
 import { readFileSync } from 'node:fs';

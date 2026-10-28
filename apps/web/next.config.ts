@@ -4,6 +4,12 @@ const config: NextConfig = {
   transpilePackages: ['@setrya/domain'],
   poweredByHeader: false,
   typedRoutes: false,
+  // Docs pages read their markdown at request time inside the dynamic marketing layout, so the files must ship with
+  // every serverless function that renders them.
+  outputFileTracingIncludes: { '/docs': ['./content/docs/**'], '/docs/**': ['./content/docs/**'], '/llms.txt': ['./content/docs/**'], '/llms-full.txt': ['./content/docs/**'] },
+  async rewrites() {
+    return [{ source: '/docs/:slug.md', destination: '/docs/md/:slug' }];
+  },
   async headers() {
     const base = [
       { key: 'X-Content-Type-Options', value: 'nosniff' },

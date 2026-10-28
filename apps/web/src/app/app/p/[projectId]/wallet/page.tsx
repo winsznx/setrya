@@ -18,15 +18,15 @@ export default async function WalletPage({ params }: { params: Promise<{ project
   const { project, health, receive, reservedZat, summary, network } = await loadView('wallet.overview', { projectId }, `/app/p/${projectId}/wallet`);
   const b = health.balance;
   const transparentOnly = b && BigInt(b.transparentZat) > 0n && BigInt(b.spendableZat) === 0n;
-  const split = b && BigInt(b.orchardZat) > 0n && BigInt(b.ironwoodZat) > 0n;
+  const split = b && BigInt(b.orchardZat) > 0n;
   return (
     <>
       <PageHeader crumbs={[{ label: project.name, href: projectPath(project.id) }, { label: 'Wallet' }]} title="Wallet" meta={<><NetworkBadge network={network} /><Badge tone={summary.state === 'ready' ? 'success' : summary.state === 'unconfigured' ? 'neutral' : 'warning'} icon={summary.state === 'ready' ? 'check' : undefined}>{summary.label}</Badge></>} actions={<TestConnectionButton label="Refresh" />} description="Read from the wallet service on your settlement host. Setrya never holds or shows a seed." />
       {!health.configured && <Callout tone="info" className="mb-5" title="Accounting mode">No wallet connection is configured on this server. Everything except sending works. <Link prefetch={false} className="text-accent-text hover:underline" href="/docs/getting-started#wallet">Connect a wallet service</Link>.</Callout>}
       {transparentOnly && <Callout tone="warning" className="mb-5" title="Funding requires a different privacy policy or conversion">This account only holds transparent funds, which cannot pay under FullPrivacy. Shield them with your wallet first, following official Zcash guidance. Setrya never downgrades the policy to spend them.</Callout>}
-      {split && <Callout tone="warning" className="mb-5" title="Funds are split across Orchard and Ironwood">A FullPrivacy payment spends from one pool. The spendable figure below is the larger pool only. Moving funds between pools reveals the amount crossing and is never done automatically.</Callout>}
+      {split && <Callout tone="warning" className="mb-5" title="Some funds are still in the Orchard pool">Payments spend from Ironwood only, so Orchard funds are not counted as spendable. Moving them into Ironwood reveals the amount crossing and is never done automatically.</Callout>}
       <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <MetricCard label="Spendable shielded balance" value={b ? <Zec zat={b.spendableZat} /> : '—'} footnote={b ? `Largest single pool, ${b.minConf}+ confirmations` : 'Wallet not reachable'} />
+        <MetricCard label="Spendable shielded balance" value={b ? <Zec zat={b.spendableZat} /> : '—'} footnote={b ? `Ironwood, ${b.minConf}+ confirmations` : 'Wallet not reachable'} />
         <MetricCard label="Pending incoming" value={<span className="text-ink-muted">Not reported</span>} footnote="The wallet reports confirmed balances by pool" />
         <MetricCard label="Reserved for approved payouts" value={<Zec zat={reservedZat} />} footnote="Local planning only. Not locked on chain." />
         <MetricCard label="Next payment requirement" value={<Zec zat={reservedZat} />} footnote="Plus the ZIP 317 fee the wallet calculates" tone={b && reservedZat > BigInt(b.spendableZat) ? 'warning' : 'default'} />
@@ -44,7 +44,7 @@ export default async function WalletPage({ params }: { params: Promise<{ project
                 <div className="min-w-0 flex-1 space-y-2 text-body-s">
                   <p className="text-ink-secondary">Unified Address with an Orchard receiver only, so incoming funds land shielded in the Ironwood pool. A UA can bundle several receiver types. Setrya always requires shielded outputs when it sends.</p>
                   <RevealValue masked={receive.masked} value={receive.address} timeoutSeconds={project.revealTimeoutSeconds} />
-                  <p className="text-label text-ink-muted">Each refresh asks the wallet for a fresh diversified address of the same account.</p>
+                  <p className="text-label text-ink-muted">Every address shown here belongs to the same payer account.</p>
                 </div>
               </div>
             ) : <p className="mt-2 text-body-s text-ink-secondary">{receive && 'error' in receive ? receive.error : 'Available once the payer account is reachable.'}</p>}

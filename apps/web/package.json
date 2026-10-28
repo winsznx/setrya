@@ -8,10 +8,12 @@
     "dev": "next dev -p 3217",
     "build": "next build",
     "start": "next start -p 3217",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
     "@setrya/domain": "workspace:*",
+    "marked": "18.0.14",
     "next": "15.5.28",
     "qrcode": "1.5.4",
     "react": "19.2.0",

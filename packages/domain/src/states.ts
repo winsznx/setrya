@@ -152,9 +152,9 @@ export type EvidenceLevel = 'created' | 'signed' | 'broadcast' | 'confirmed' | '
 export type PaymentStatus = 'approved_not_paid' | 'pending' | 'confirmed' | 'failed' | 'held';
 
 export const WATERMARK: Record<PaymentStatus, string> = {
-  approved_not_paid: 'APPROVED — NOT PAID',
+  approved_not_paid: 'APPROVED, NOT PAID',
   pending: 'PAYMENT PENDING',
   confirmed: 'CONFIRMED ON CHAIN',
   failed: 'PAYMENT NOT COMPLETED',
-  held: 'HELD — NOT PAID',
+  held: 'HELD, NOT PAID',
 };

@@ -60,8 +60,8 @@ pub fn orchard_address(db: &mut Db, id: AccountUuid) -> anyhow::Result<String> {
 }
 
 /// A Sapling-only receiving address, for funders whose wallets cannot create Orchard or Ironwood
-/// outputs (some faucets). Sapling funds cannot pay under FullPrivacy until `fund-ironwood` moves
-/// them, which reveals the amount crossing pools.
+/// outputs (some faucets). Sapling funds cannot pay under FullPrivacy until they are moved into
+/// Ironwood, which reveals the amount crossing pools.
 pub fn sapling_address(db: &mut Db, id: AccountUuid) -> anyhow::Result<String> {
     use zcash_client_backend::data_api::WalletWrite;
     use zcash_keys::{
@@ -89,7 +89,7 @@ pub fn sapling_address(db: &mut Db, id: AccountUuid) -> anyhow::Result<String> {
 }
 
 /// A transparent P2PKH receiving address, for funders that can only pay transparent addresses.
-/// Everything about a transparent payment is public; `fund-ironwood` shields it before it can pay.
+/// Everything about a transparent payment is public, and it must be shielded into Ironwood before it can pay.
 pub fn transparent_address(db: &mut Db, id: AccountUuid) -> anyhow::Result<String> {
     use zcash_client_backend::data_api::WalletWrite;
     use zcash_keys::{

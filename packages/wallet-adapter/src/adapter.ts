@@ -157,8 +157,9 @@ export class ZalletAdapter {
         const orchard = zatString(balance.pools.orchard?.valueZat);
         const ironwood = zatString(balance.pools.ironwood?.valueZat);
         const sapling = zatString(balance.pools.sapling?.valueZat);
-        // FullPrivacy spends from one pool, so the spendable figure is the largest single eligible pool, never their sum.
-        const spendable = c.fundSource === 'orchard' ? (BigInt(orchard) > BigInt(ironwood) ? orchard : ironwood) : sapling;
+        // FullPrivacy spends inside one pool. Since NU6.3 an Orchard-receiver payer pays from Ironwood only: legacy
+        // Orchard notes would have to cross pools first, so they are reported but never counted as spendable.
+        const spendable = c.fundSource === 'orchard' ? ironwood : sapling;
         health.balance = { minConf, orchardZat: orchard, ironwoodZat: ironwood, saplingZat: sapling, transparentZat: zatString(balance.pools.transparent?.valueZat), spendableZat: spendable, error: null };
         if (BigInt(spendable) === 0n) blockers.push('No confirmed shielded funds are spendable under FullPrivacy');
       } catch (error) {
@@ -203,7 +204,7 @@ export class ZalletAdapter {
   async spendableZat(minConf: number): Promise<bigint> {
     const balance = await this.zallet.call<ZalletBalance>('z_getbalanceforaccount', [this.config.accountUuid, minConf]);
     const pick = (k: 'orchard' | 'ironwood' | 'sapling') => BigInt(zatString(balance.pools[k]?.valueZat));
-    return this.config.fundSource === 'orchard' ? (pick('orchard') > pick('ironwood') ? pick('orchard') : pick('ironwood')) : pick('sapling');
+    return this.config.fundSource === 'orchard' ? pick('ironwood') : pick('sapling');
   }
 
   /** pczt_create under FullPrivacy from one isolating fund source. Memos carry only an opaque reference. */
