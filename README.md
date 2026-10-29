@@ -36,7 +36,9 @@ On 29 October 2026, Setrya ran a full settlement on Zcash testnet through https:
 - It confirmed on chain 196 seconds after broadcast.
 - Each partner's own wallet then showed exactly the approved amount in Ironwood: 0.115 TAZ and 0.0575 TAZ.
 
-`tests/e2e/live-testnet.mjs` repeats that run against any deployment.
+The public sandbox's first claim through [setrya.xyz/try](https://setrya.xyz/try) paid a visitor address in [`d0d0e87865e461fcedb9b7d18443f4b35a7fc0c0903802cace1e0bbf4cedd965`](https://testnet.zcashexplorer.app/transactions/d0d0e87865e461fcedb9b7d18443f4b35a7fc0c0903802cace1e0bbf4cedd965). It went from claim to a confirmed payment with a ready statement in about two and a half minutes.
+
+`tests/e2e/live-testnet.mjs` repeats the full operator run against any deployment.
 
 ## For judges and visitors
 
