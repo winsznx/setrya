@@ -93,3 +93,13 @@ Switching backends means changing `ZALLET_RPC_URL` and `ZEBRA_RPC_URL`. With the
 | lightwalletd server | Your server's IP address, request timing, the raw bytes you broadcast | Amounts, recipients, memos |
 
 [Privacy model](/docs/privacy) goes further on what each viewer learns.
+
+## The public sandbox
+
+The sandbox behind [setrya.xyz/try](https://setrya.xyz/try) is a second, separate installation on the same host: its own PostgreSQL database, master key, signer wallet (at `172.31.78.10`) and API, published on port 8446. It shares no keys or data with an operator's workspace. The web app reaches it through its own relay at `/api/sandbox/v1`, which never forwards cookies, so an operator's session can't reach it.
+
+With `SETRYA_SANDBOX=1`, the API creates its own owner on first start and drives its own routes in-process for each claim: a sample ZEC project, the visitor as a partner, approval with a payout commitment, inspection, signing and confirmation. Claims run one at a time. Each visitor address can claim once, and each IP three times an hour. The statement link is sealed on the server and its key is returned only to the claimant. The sandbox refuses to start on mainnet.
+
+## Demo mode
+
+With `SETRYA_DEMO_MODE=1`, a testnet workspace can be shared with people who aren't its owner. Changing the password or vault passphrase, signing other sessions out, backups and archiving a project are refused with `DEMO_MODE`. Each approval is capped by `SETRYA_DEMO_MAX_ZAT`, and every unlock ends within an hour. Startup fails if demo mode is on with `SETRYA_NETWORK=mainnet`.

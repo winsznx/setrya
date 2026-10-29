@@ -1,3 +1,5 @@
+The fastest way in needs no login: open [setrya.xyz/try](https://setrya.xyz/try), paste a Zcash testnet address from Zingo or Zkool, and the public sandbox pays you 0.01 TAZ in one shielded transaction. You then open a private statement and check, in your browser, that your payout is part of the approved set. The sandbox is a separate installation with its own wallet, so nothing there touches the workspace below.
+
 This page is a five-minute tour of a real Setrya workspace on Zcash testnet, ending with a payment you receive yourself. Everything you see is live: the payments are real shielded testnet transactions, paid in TAZ, the test coin, which has no value.
 
 The workspace is shared. Everyone signing in with the demo login sees the same records, and anything that could lock other people out is turned off: changing the password or vault passphrase, signing other sessions out, backups and archiving a project. Each approval can pay at most 0.05 TAZ.

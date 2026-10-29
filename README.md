@@ -38,6 +38,12 @@ On 29 October 2026, Setrya ran a full settlement on Zcash testnet through https:
 
 `tests/e2e/live-testnet.mjs` repeats that run against any deployment.
 
+## For judges and visitors
+
+- **Get paid privately at [setrya.xyz/try](https://setrya.xyz/try).** Paste a Zcash testnet address and the public sandbox pays you 0.01 TAZ through the real pipeline: approval with a payout commitment, inspection before signing, one shielded transaction, then a private statement you verify yourself. The sandbox is a separate installation with its own database, keys and wallet.
+- **Run the operator side.** The shared demo workspace at [setrya.xyz/sign-in](https://setrya.xyz/sign-in) shows its demo login on the page. Password, passphrase, session and backup changes are turned off there, and each approval is capped at 0.05 TAZ. The five-minute guide is at [setrya.xyz/docs/for-judges](https://setrya.xyz/docs/for-judges).
+- **Verify a payout without trusting Setrya.** Every approval commits all payout lines to one Merkle root, which goes into each recipient's encrypted memo. A partner's statement carries their own proof, so they can check their line is in the approved set without learning anything about other partners. See [Verifiable payouts](https://setrya.xyz/docs/verifiable-payouts).
+
 ## Layout
 
 ```
@@ -95,6 +101,11 @@ The settlement host runs the API, the signer and PostgreSQL with Docker Compose.
 5. **Configure the web tier.** Set `SETRYA_API_URL=https://api.your.domain:8444`, `SETRYA_EDGE_KEY` (from `secrets/edge_key`) and `SETRYA_API_CA` (the PEM in `secrets/tls.crt`). On Vercel, set the project root to `apps/web` with "include files outside the root directory" on, then run `vercel deploy --prod` from the repository root.
 
 Updating the stack means syncing the source and running `docker compose up -d --build` again. Migrations run first, in their own one-shot container.
+
+### Optional: the public sandbox and demo mode
+
+- **Sandbox.** `infra/vps/sandbox` is a second, fully separate stack (its own database, master key, signer on 172.31.78.10 and API on port 8446). Create its secrets with `TARGET_DIR=sandbox ./bootstrap.sh`, initialise its wallet as in step 3, fill the `SETRYA_SANDBOX_*` values in `sandbox/api.env`, then run `docker compose up -d --build` in that folder. Point the web tier at it with `SETRYA_SANDBOX_API_URL`, `SETRYA_SANDBOX_EDGE_KEY` and `SETRYA_SANDBOX_API_CA`. The sandbox refuses to start on mainnet.
+- **Demo mode.** Set `SETRYA_DEMO_MODE=1` and the `SETRYA_DEMO_LOGIN_*` values in `api.env` to share a testnet workspace safely. See `infra/vps/api.env.example`.
 
 ## Tests
 
