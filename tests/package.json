@@ -7,6 +7,6 @@
     "playwright": "1.56.1",
     "@playwright/test": "1.56.1",
     "@noble/hashes": "1.8.0",
-    "@scure/base": "1.2.6"
+    "@scure/base": "2.4.0"
   }
 }
