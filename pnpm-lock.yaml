@@ -156,8 +156,8 @@ importers:
         specifier: 1.8.0
         version: 1.8.0
       '@scure/base':
-        specifier: 1.2.6
-        version: 1.2.6
+        specifier: 2.4.0
+        version: 2.4.0
       zod:
         specifier: 3.25.76
         version: 3.25.76
@@ -204,8 +204,8 @@ importers:
         specifier: 1.56.1
         version: 1.56.1
       '@scure/base':
-        specifier: 1.2.6
-        version: 1.2.6
+        specifier: 2.4.0
+        version: 2.4.0
       playwright:
         specifier: 1.56.1
         version: 1.56.1
@@ -1167,8 +1167,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@scure/base@1.2.6':
-    resolution: {integrity: sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg==}
+  '@scure/base@2.4.0':
+    resolution: {integrity: sha512-thZ1TuJwFwBblOhgsjDKvvGirBxNp+wSvY/DR6tJBJOTDhdAAcHJ8Vbr2eFnqaxeca4+t0i9KBf+uHYGWwZORg==}
 
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
@@ -2733,7 +2733,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.65.1':
     optional: true
 
-  '@scure/base@1.2.6': {}
+  '@scure/base@2.4.0': {}
 
   '@swc/helpers@0.5.15':
     dependencies:
